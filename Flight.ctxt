@@ -1,15 +1,13 @@
 #BlueJ class context
-comment0.params=
-comment0.target=Flight()
+comment0.params=sim\ st
+comment0.target=Flight(Simulator,\ Stats)
 comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Flight\r\n
 comment1.params=
 comment1.target=int\ getTakeoffTime()
 comment10.params=
 comment10.target=void\ getStatus()
-comment11.params=
-comment11.target=void\ changeStatus()
-comment12.params=tick
-comment12.target=void\ act(int)
+comment11.params=tick
+comment11.target=void\ act(int)
 comment2.params=
 comment2.target=int\ getEstLandTime()
 comment3.params=
@@ -26,4 +24,4 @@ comment8.params=
 comment8.target=void\ land()
 comment9.params=
 comment9.target=void\ takeoff()
-numComments=13
+numComments=12

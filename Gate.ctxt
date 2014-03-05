@@ -1,5 +1,11 @@
 #BlueJ class context
-comment0.params=flights
-comment0.target=Gate(java.util.ArrayList)
+comment0.params=
+comment0.target=Gate()
 comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Gate\r\n
-numComments=1
+comment1.params=
+comment1.target=void\ flightCheck()
+comment2.params=
+comment2.target=boolean\ getGateAvailability()
+comment3.params=
+comment3.target=void\ act()
+numComments=4

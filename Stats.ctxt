@@ -1,0 +1,18 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Stats()
+comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Stats\r\n
+comment1.params=fl
+comment1.target=void\ newFlight(Flight)
+comment2.params=tick
+comment2.target=void\ act(int)
+comment2.text=\r\n\ Actor\ methods\r\n
+comment3.params=
+comment3.target=void\ recieveInfo()
+comment4.params=
+comment4.target=void\ calcAvgFlightTime()
+comment4.text=\r\n\ Calculates\ average\ time\ in\ air\r\n
+comment5.params=
+comment5.target=void\ printReport()
+comment5.text=\r\n\ Constructor\ for\ objects\ of\ class\ Stats\r\n
+numComments=6
