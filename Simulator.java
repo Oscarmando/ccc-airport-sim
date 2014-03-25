@@ -11,18 +11,17 @@ public class Simulator
     //ArrayList<Actor> actors;
     //ArrayList<Gate> gates;
     Operations op;
-    Gate gate;
-    Stats st;
-    Plane plane;
+    //Gate gate;
+    //Stats st;
+    //Plane plane;
     public Simulator(){
         time = 0;
         System.out.print('\u000C'); //Clears console
         op = new Operations();
-        //gates = new ArrayList<Gate>();
-        //actors = new ArrayList<Actor>();
+        
         rand = new Random();
       
-        Operations.setStats(st);
+        //Operations.setStats(st);
 
         tickLoop();
     }

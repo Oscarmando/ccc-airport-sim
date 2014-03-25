@@ -5,38 +5,37 @@ public class Operations
     private static ArrayList<Gate> gates;
     private static ArrayList<Plane> planes;
     private static Stats st;
-    
-    public Operations(){
-     actors = new ArrayList<Actor>();
-     gates = new ArrayList<Gate>();
-     planes = new ArrayList<Plane>();
-     createGates(30);
-     createIdlePlanes(15); 
+
+    public Operations()
+    {
+        st = new Stats();
+        actors = new ArrayList<Actor>();
+        gates = new ArrayList<Gate>();
+        planes = new ArrayList<Plane>();
+        createGates(1);
+        createIdlePlanes(1); 
+        makeFlight();
     }
-    
-    static void setStats(Stats _st){
-        st = _st;
-    }
-    
+
     static Stats getStats()
     {
         return st;
     }
-    
+
     static void addGate(Gate g){
         gates.add(g);
     }
-    
+
     static ArrayList<Actor> getActors()
     {
         return actors;
     }
-    
+
     static ArrayList<Plane> getPlanes()
     {
         return planes;
     }
-    
+
     /**
      * method for getting a plane that is prepped and ready.
      */
@@ -46,17 +45,17 @@ public class Operations
         }
         return null;
     }
-    
+
     /**
-    *method to get the first open gate we can find.
-    */
+     *method to get the first open gate we can find.
+     */
     static Gate getOpenGate(){
         for(Gate g: gates){
             if(g.getGateAvailability()){ return g; }
         }
         return null;
     }
-    
+
     private void createIdlePlanes(int num){
         for(int i=0;i<num;i++){
             Plane plane = new Plane("plane"+i, "ccc-airport");
@@ -66,7 +65,7 @@ public class Operations
             //st.PlaneGateAttached(gate);
         }
     }
-    
+
     private void createGates(int num){
         for(int i=1;i<=num;i++){
             Gate g = new Gate(i);
@@ -74,13 +73,13 @@ public class Operations
             gates.add(g);
         }
     }
-    
+
     static void makeFlight(){
         Flight f = new Flight(getIdlePlane());
         actors.add(f);
         st.newFlight(f);
     }
-    
+
     static void makeInBound(){
         //Flight f = new Flight();
     }

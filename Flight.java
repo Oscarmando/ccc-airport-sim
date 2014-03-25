@@ -22,7 +22,7 @@ public class Flight implements Actor
     public Flight(Plane plane)
     {
         this.plane = plane;
-        isDeparted = true;
+        isDeparted = false;
         isReady = true;
         atGate = false;
         takeoffTime = random.nextInt(5)+5;
@@ -66,6 +66,7 @@ public class Flight implements Actor
         {
             System.out.println("The flight is on the ground.");
             isDeparted = false;
+            Operations.getStats().recieveInfo();
         }
         else
         {
@@ -92,16 +93,16 @@ public class Flight implements Actor
         System.out.println("Departed: "+isDeparted);
         System.out.println("Ready: "+isReady);
     }
-    
+
     public void requestGate()
     {
-      System.out.println("Requesting Gate");
-      g = Operations.getOpenGate();
-      if(g !=null)
-      atGate = true;
+        System.out.println("Requesting Gate");
+        g = Operations.getOpenGate();
+        if(g !=null)
+            atGate = true;
 
     }
-    
+
     public void attachPlane(Plane p){
         plane = p;
     }
@@ -109,22 +110,24 @@ public class Flight implements Actor
     public void act(int tick)
     {
         difference = actualLandTime - 10;
-        if(atGate == false && isDeparted == true){
-        if(tick == difference)
-        {
-         requestGate();
-         if(g == null)
-            actualLandTime = actualLandTime +20;
-            else{
-            land();
-            Operations.getStats().recieveInfo();
+        if(isDeparted == false && isReady == true){
+            if(tick == difference) 
+            {
+                takeoff();
+            }
         }
-        }    
+        else if(atGate == false && isDeparted == true){
+            if(tick == difference + prepTime)
+            {
+                requestGate();
+                if(g == null)
+                    actualLandTime = actualLandTime +20;
+                else{
+                    land();
+   
+                }
+            }    
+        }
+
     }
-    else if(isDeparted == false && isReady == true)
-    if(tick == difference +prepTime) 
-    {
-       takeoff();
-    }
-}
 }
