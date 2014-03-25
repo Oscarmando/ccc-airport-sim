@@ -1,6 +1,6 @@
 #BlueJ class context
-comment0.params=
-comment0.target=Stats()
+comment0.params=op
+comment0.target=Stats(Operations)
 comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Stats\r\n
 comment1.params=currentFlight
 comment1.target=void\ newFlight(Flight)

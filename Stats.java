@@ -9,16 +9,20 @@ public class Stats implements Actor
 {
     private int avgFlightTime;
     private int totalFlightTimes;
+    private int totalFlightsLanded;
     private boolean infoRecieved;
     Flight currentFlight;
+    Operations op;
 
     /**
      * Constructor for objects of class Stats
      */
-    public Stats()
+    public Stats(Operations op)
     {
+        this.op = op;
         avgFlightTime = 0;
         totalFlightTimes = 0;
+        totalFlightsLanded = 0;
         infoRecieved = false;
         currentFlight = null;
     }
@@ -34,6 +38,7 @@ public class Stats implements Actor
     {
         if(infoRecieved == true)
         {
+            totalFlightsLanded++;
             calcAvgFlightTime();
             printReport();
             infoRecieved = false;
@@ -52,7 +57,7 @@ public class Stats implements Actor
     {
         int flightTime = (currentFlight.getActualLandTime() - currentFlight.getTakeoffTime());
         totalFlightTimes += flightTime;
-        avgFlightTime =  totalFlightTimes / Operations.getPlanes().size();
+        avgFlightTime =  totalFlightTimes / totalFlightsLanded;
     }
 
     /**

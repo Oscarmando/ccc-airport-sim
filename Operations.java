@@ -1,37 +1,38 @@
 import java.util.*;
 public class Operations
 {
-    private static ArrayList<Actor> actors;
-    private static ArrayList<Gate> gates;
-    private static ArrayList<Plane> planes;
-    private static Stats st;
+    private  ArrayList<Actor> actors;
+    private  ArrayList<Gate> gates;
+    private  ArrayList<Plane> planes;
+    private  Stats st;
 
     public Operations()
     {
-        st = new Stats();
+        st = new Stats(this);
         actors = new ArrayList<Actor>();
         gates = new ArrayList<Gate>();
         planes = new ArrayList<Plane>();
+        actors.add(st);
         createGates(1);
         createIdlePlanes(1); 
         makeFlight();
     }
 
-    static Stats getStats()
+    public void sendStatInfo()
     {
-        return st;
+        st.recieveInfo();
     }
 
-    static void addGate(Gate g){
+    private void addGate(Gate g){
         gates.add(g);
     }
 
-    static ArrayList<Actor> getActors()
+    public ArrayList<Actor> getActors()
     {
         return actors;
     }
 
-    static ArrayList<Plane> getPlanes()
+    public ArrayList<Plane> getPlanes()
     {
         return planes;
     }
@@ -39,7 +40,7 @@ public class Operations
     /**
      * method for getting a plane that is prepped and ready.
      */
-    static Plane getIdlePlane(){
+    private Plane getIdlePlane(){
         for(Plane p: planes){
             if(p.isIdle()){ return p; }
         }
@@ -49,7 +50,7 @@ public class Operations
     /**
      *method to get the first open gate we can find.
      */
-    static Gate getOpenGate(){
+   public Gate getOpenGate(){
         for(Gate g: gates){
             if(g.getGateAvailability()){ return g; }
         }
@@ -59,8 +60,8 @@ public class Operations
     private void createIdlePlanes(int num){
         for(int i=0;i<num;i++){
             Plane plane = new Plane("plane"+i, "ccc-airport");
-            actors.add(plane);
-            Gate gate = Operations.getOpenGate();
+            planes.add(plane);
+            Gate gate = getOpenGate();
             //gate.park(plane);
             //st.PlaneGateAttached(gate);
         }
@@ -74,8 +75,8 @@ public class Operations
         }
     }
 
-    static void makeFlight(){
-        Flight f = new Flight(getIdlePlane());
+    private void makeFlight(){
+        Flight f = new Flight(getIdlePlane(), this);
         actors.add(f);
         st.newFlight(f);
     }

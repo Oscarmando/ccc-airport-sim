@@ -15,18 +15,21 @@ public class Flight implements Actor
     private Random random = new Random();
     private Gate g;
     private Plane plane;
+    private Operations op;
 
     /**
      * Constructor for objects of class Flight
      */
-    public Flight(Plane plane)
+    public Flight(Plane plane, Operations op)
     {
         this.plane = plane;
+        this.op = op;
         isDeparted = false;
         isReady = true;
         atGate = false;
         takeoffTime = random.nextInt(5)+5;
-        actualLandTime = random.nextInt(20)+ 20;
+        actualLandTime = 0;
+        estLandTime = random.nextInt(20)+ 20;
         prepTime = 30;
     }
 
@@ -66,7 +69,7 @@ public class Flight implements Actor
         {
             System.out.println("The flight is on the ground.");
             isDeparted = false;
-            Operations.getStats().recieveInfo();
+            op.sendStatInfo();
         }
         else
         {
@@ -97,7 +100,7 @@ public class Flight implements Actor
     public void requestGate()
     {
         System.out.println("Requesting Gate");
-        g = Operations.getOpenGate();
+        g = op.getOpenGate();
         if(g !=null)
             atGate = true;
 
@@ -109,9 +112,9 @@ public class Flight implements Actor
 
     public void act(int tick)
     {
-        difference = actualLandTime - 10;
+        difference = estLandTime - 10;
         if(isDeparted == false && isReady == true){
-            if(tick == difference) 
+            if(tick == takeoffTime) 
             {
                 takeoff();
             }
@@ -121,8 +124,9 @@ public class Flight implements Actor
             {
                 requestGate();
                 if(g == null)
-                    actualLandTime = actualLandTime +20;
+                    estLandTime = estLandTime +20;
                 else{
+                    actualLandTime = tick;
                     land();
    
                 }

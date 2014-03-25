@@ -1,6 +1,6 @@
 #BlueJ class context
-comment0.params=plane
-comment0.target=Flight(Plane)
+comment0.params=plane\ op
+comment0.target=Flight(Plane,\ Operations)
 comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Flight\r\n
 comment1.params=
 comment1.target=int\ getTakeoffTime()
