@@ -1,53 +1,59 @@
 /**
- * CCC-airport gate class constructor + act method
+ * CCC-airport gate class.
  * 
  */
-import java.util.*;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.HashMap;
 public class Gate 
 {
-    //private ArrayList<Flight> flight;
-    //private HashMap<String, String> flightName;
-    //private Random rand; //used for anything needed.
     private boolean gateAvailability; // if gate is available or not
-    private int numberFlights; //tracks number of flights
+    private int gateNumber;
     private Plane plane;
 
     /**
-     * Constructor for objects of class Gate
+     * Constructor for objects of class Gate.
      */
-    public Gate()//ArrayList<Flight> flights)
+    public Gate(int gateNumber)
     {
-        //flight = flights;
-        //flights = new ArrayList<Flight>();
-        //flightName = new HashMap<String, String>();
-        //rand = new Random();
+        this.gateNumber = gateNumber;
         gateAvailability = true;
     }
-
-    public void flightCheck()
+    
+    /**
+     * Mutator method to assign plane to gate.
+     */
+    public void setPlane(Plane plane)
     {
-
-    }
-
-    public boolean getGateAvailability()
-    {
-        if(gateAvailability == true)
-            return true;
-        else{
-            return false;  
-        }
+        this.plane = plane;
     }
     
-    public void setgateAvailability(boolean gateavailability)
+    /**
+     * Accessor method to get plane from gate.
+     */
+    public Plane getPlane()
     {
-      gateAvailability = gateavailability;  
+        return plane;
+    }
+    
+    /**
+     * Accessor method to return gate number.
+     */
+    public int getGateNumber()
+    {
+        return gateNumber;
     }
 
-    public void act()
+    /**
+     * Accessor method to return gate availability.
+     */
+    public boolean getGateAvailability()
     {
-
+        return gateAvailability;
+    }
+    
+    /**
+     * Mutator method to assign gate availabiliy to true or false.
+     */
+    public void setGateAvailability(boolean gateAvailability)
+    {
+      this.gateAvailability = gateAvailability;  
     }
 }

@@ -8,48 +8,25 @@ public class Simulator
     Random rand;
 
     //ArrayList<Flight> flights;
-    ArrayList<Actor> actors;
-    ArrayList<Gate> gates;
-
+    //ArrayList<Actor> actors;
+    //ArrayList<Gate> gates;
+    Operations op;
     Gate gate;
     Stats st;
     Plane plane;
     public Simulator(){
-        System.out.print('\u000C'); //Clears console
-
-        gates = new ArrayList<Gate>();
-        actors = new ArrayList<Actor>();
         time = 0;
+        System.out.print('\u000C'); //Clears console
+        op = new Operations();
+        //gates = new ArrayList<Gate>();
+        //actors = new ArrayList<Actor>();
         rand = new Random();
-        st = new Stats();
+      
+        Operations.setStats(st);
 
-        gates.add(new Gate());
-
-        actors.add(st);
-        //actors.add(gate);
-
-        makeFlight();
         tickLoop();
     }
 
-    //test method
-    public void makeFlight(){
-        Flight f = new Flight(this, st, plane);
-        actors.add(f);
-        st.newFlight(f);
-    }
-
-    public Gate needGate(Flight f){
-        for(Gate gate: gates){
-            if(gate.getGateAvailability()){
-                return gate;
-            }
-            
-            //keep flying ;)
-
-        }
-        return null;
-    }
 
     public void tickLoop(){
         while(true){
@@ -59,11 +36,31 @@ public class Simulator
             }catch(Exception e){
                 System.out.println("Oops!");
             }
+            
+            //if(shouldCreate()){
+            //    makeInBound();
+            //}
+            
+            //if(shouldCreate()){
+            //    makeOutBound();
+            //}
 
-            for(Actor a: actors){
+            for(Actor a: op.getActors()){
                 a.act(time);
             }
         }
+    }
+    
+    private void makeInBound(){
+        
+    }
+    
+    private void makeOutBound(){
+        //Flight f = new Flight();
+        //Plane pl = Operations.getIdlePlane();
+        //f.attachPlane(pl);
+        //actors.add(f);
+        //st.
     }
 
     private void tick(){
@@ -74,15 +71,15 @@ public class Simulator
         System.out.println(time);
     }
 
-    public boolean shouldCreate(){
-        int t = rand.nextInt(10);
+    /*public boolean shouldCreate(){
+        int t = rand.nextInt(15);
         switch(t){
-            case 2: case 6: case 9:
+            case 2: case 9: case 14:
             return true;
 
             default:
             return false;
         }
     }
-
+    */
 }

@@ -1,22 +1,24 @@
 import java.util.Random;
 /**
- * Intended to be the actual plane that is "carried" by the flight.
+ * Write a description of class Plane here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Plane
+public class Plane implements Actor
 {
-   private int planeNumber;
+   private String planeNumber;
    private int numPassengers;
    private String airline;
    private int prepTime;
+   private boolean idle;
    
-   public Plane(int planeNumber, String airline)
+   public Plane(String planeNumber, String airline)
    {
       this.planeNumber = planeNumber;
       this.airline = airline;
       prepTime = 10;
+      idle = true;
    }
    
    public int getPrepTime()
@@ -24,12 +26,13 @@ public class Plane
        return prepTime;
    }
    
+   
    public void act(int tick)
    {
-       
-       
-       
-       
+   }
+   
+   public boolean isIdle(){
+       return idle;
    }
        
 }
