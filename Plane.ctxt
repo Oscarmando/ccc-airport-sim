@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.params=planeNumber\ airline
+comment0.target=Plane(int,\ java.lang.String)
+comment1.params=
+comment1.target=int\ getPrepTime()
+comment2.params=tick
+comment2.target=void\ act(int)
+numComments=3

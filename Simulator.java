@@ -13,6 +13,7 @@ public class Simulator
 
     Gate gate;
     Stats st;
+    Plane plane;
     public Simulator(){
         System.out.print('\u000C'); //Clears console
 
@@ -33,7 +34,7 @@ public class Simulator
 
     //test method
     public void makeFlight(){
-        Flight f = new Flight(this, st);
+        Flight f = new Flight(this, st, plane);
         actors.add(f);
         st.newFlight(f);
     }
@@ -43,6 +44,7 @@ public class Simulator
             if(gate.getGateAvailability()){
                 return gate;
             }
+            
             //keep flying ;)
 
         }

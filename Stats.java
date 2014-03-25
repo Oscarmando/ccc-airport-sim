@@ -48,7 +48,7 @@ public class Stats implements Actor
      */
     public void calcAvgFlightTime()
     {
-        avgFlightTime = f.getActualLandTime();
+        avgFlightTime = f.getActualLandTime() / f.getnumofFlights();
     }
 
     /**

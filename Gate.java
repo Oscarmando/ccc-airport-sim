@@ -13,6 +13,7 @@ public class Gate
     //private Random rand; //used for anything needed.
     private boolean gateAvailability; // if gate is available or not
     private int numberFlights; //tracks number of flights
+    private Plane plane;
 
     /**
      * Constructor for objects of class Gate
@@ -35,8 +36,14 @@ public class Gate
     {
         if(gateAvailability == true)
             return true;
-        else
+        else{
             return false;  
+        }
+    }
+    
+    public void setgateAvailability(boolean gateavailability)
+    {
+      gateAvailability = gateavailability;  
     }
 
     public void act()
