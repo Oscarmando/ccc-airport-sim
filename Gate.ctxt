@@ -2,11 +2,11 @@
 comment0.params=gateNumber
 comment0.target=Gate(int)
 comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Gate.\r\n
-comment1.params=plane
-comment1.target=void\ setPlane(Plane)
+comment1.params=flight
+comment1.target=void\ setPlane(Flight)
 comment1.text=\r\n\ Mutator\ method\ to\ assign\ plane\ to\ gate.\r\n
 comment2.params=
-comment2.target=Plane\ getPlane()
+comment2.target=Flight\ getFlight()
 comment2.text=\r\n\ Accessor\ method\ to\ get\ plane\ from\ gate.\r\n
 comment3.params=
 comment3.target=int\ getGateNumber()

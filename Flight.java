@@ -14,15 +14,13 @@ public class Flight implements Actor
     private int prepTime;
     private Random random = new Random();
     private Gate g;
-    private Plane plane;
     private Operations op;
 
     /**
      * Constructor for objects of class Flight
      */
-    public Flight(Plane plane, Operations op)
+    public Flight(Operations op)
     {
-        this.plane = plane;
         this.op = op;
         isDeparted = false;
         isReady = true;
@@ -97,6 +95,9 @@ public class Flight implements Actor
         System.out.println("Ready: "+isReady);
     }
 
+    /**
+     * 
+     */
     public void requestGate()
     {
         System.out.println("Requesting Gate");
@@ -105,11 +106,11 @@ public class Flight implements Actor
             atGate = true;
 
     }
-
-    public void attachPlane(Plane p){
-        plane = p;
-    }
-
+    
+    /**
+     * This method allows the flight to react to conditions in specific
+     * amount of "time"(tick) and decides what to do.
+     */
     public void act(int tick)
     {
         difference = estLandTime - 10;

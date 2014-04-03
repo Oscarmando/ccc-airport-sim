@@ -6,7 +6,7 @@ public class Gate
 {
     private boolean gateAvailability; // if gate is available or not
     private int gateNumber;
-    private Plane plane;
+    private Flight flight;
 
     /**
      * Constructor for objects of class Gate.
@@ -20,17 +20,17 @@ public class Gate
     /**
      * Mutator method to assign plane to gate.
      */
-    public void setPlane(Plane plane)
+    public void setPlane(Flight flight)
     {
-        this.plane = plane;
+        this.flight = flight;
     }
     
     /**
      * Accessor method to get plane from gate.
      */
-    public Plane getPlane()
+    public Flight getFlight()
     {
-        return plane;
+        return flight;
     }
     
     /**

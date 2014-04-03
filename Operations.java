@@ -3,7 +3,6 @@ public class Operations
 {
     private  ArrayList<Actor> actors;
     private  ArrayList<Gate> gates;
-    private  ArrayList<Plane> planes;
     private  Stats st;
 
     public Operations()
@@ -11,11 +10,9 @@ public class Operations
         st = new Stats(this);
         actors = new ArrayList<Actor>();
         gates = new ArrayList<Gate>();
-        planes = new ArrayList<Plane>();
         actors.add(st);
-        createGates(1);
-        createIdlePlanes(1); 
-        makeFlight();
+        createGates(2);
+        outBoundFlights(2); 
     }
 
     public void sendStatInfo()
@@ -32,21 +29,6 @@ public class Operations
         return actors;
     }
 
-    public ArrayList<Plane> getPlanes()
-    {
-        return planes;
-    }
-
-    /**
-     * method for getting a plane that is prepped and ready.
-     */
-    private Plane getIdlePlane(){
-        for(Plane p: planes){
-            if(p.isIdle()){ return p; }
-        }
-        return null;
-    }
-
     /**
      *method to get the first open gate we can find.
      */
@@ -57,31 +39,30 @@ public class Operations
         return null;
     }
 
-    private void createIdlePlanes(int num){
+    private void outBoundFlights(int num){
         for(int i=0;i<num;i++){
-            Plane plane = new Plane("plane"+i, "ccc-airport");
-            planes.add(plane);
+            makeOutBoundFlight();
             Gate gate = getOpenGate();
-            //gate.park(plane);
-            //st.PlaneGateAttached(gate);
         }
     }
 
     private void createGates(int num){
         for(int i=1;i<=num;i++){
             Gate g = new Gate(i);
-            //st.gateCreated(g);
             gates.add(g);
         }
     }
 
-    private void makeFlight(){
-        Flight f = new Flight(getIdlePlane(), this);
+    private void makeOutBoundFlight(){
+        Flight f = new Flight(this);
         actors.add(f);
         st.newFlight(f);
     }
 
-    static void makeInBound(){
-        //Flight f = new Flight();
+       /**
+     * Will create planes going into the airport.
+     */
+    private void makeInBoundFlight(){
+        
     }
 }

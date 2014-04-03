@@ -1,9 +1,6 @@
 
 /**
- * Write a description of class Stats here.
- * 
- * @author (Statistics group) 
- * @version (3/4/2014)
+ * Tracks the flights and time it takes to prep, take off and land
  */
 public class Stats implements Actor
 {
@@ -32,7 +29,7 @@ public class Stats implements Actor
     }
 
     /**
-     * Actor methods
+     * If info is received tracks number of flights and calculates avg flight time
      */
     public void act(int tick)
     {
@@ -44,7 +41,10 @@ public class Stats implements Actor
             infoRecieved = false;
         }
     }
-
+    
+    /**
+     *  Sets boolean infoRecieved to true.
+     */
     public void recieveInfo()
     {
         infoRecieved = true;
@@ -61,7 +61,7 @@ public class Stats implements Actor
     }
 
     /**
-     * Constructor for objects of class Stats
+     * prints report of all the stats
      */
     public void printReport()
     {

@@ -6,23 +6,12 @@ public class Simulator
 
     public int time;
     Random rand;
-
-    //ArrayList<Flight> flights;
-    //ArrayList<Actor> actors;
-    //ArrayList<Gate> gates;
     Operations op;
-    //Gate gate;
-    //Stats st;
-    //Plane plane;
     public Simulator(){
         time = 0;
         System.out.print('\u000C'); //Clears console
         op = new Operations();
-        
         rand = new Random();
-      
-        //Operations.setStats(st);
-
         tickLoop();
     }
 
@@ -35,31 +24,10 @@ public class Simulator
             }catch(Exception e){
                 System.out.println("Oops!");
             }
-            
-            //if(shouldCreate()){
-            //    makeInBound();
-            //}
-            
-            //if(shouldCreate()){
-            //    makeOutBound();
-            //}
-
             for(Actor a: op.getActors()){
                 a.act(time);
             }
         }
-    }
-    
-    private void makeInBound(){
-        
-    }
-    
-    private void makeOutBound(){
-        //Flight f = new Flight();
-        //Plane pl = Operations.getIdlePlane();
-        //f.attachPlane(pl);
-        //actors.add(f);
-        //st.
     }
 
     private void tick(){
@@ -69,16 +37,4 @@ public class Simulator
         time++;
         System.out.println(time);
     }
-
-    /*public boolean shouldCreate(){
-        int t = rand.nextInt(15);
-        switch(t){
-            case 2: case 9: case 14:
-            return true;
-
-            default:
-            return false;
-        }
-    }
-    */
 }
