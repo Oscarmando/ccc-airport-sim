@@ -55,8 +55,8 @@ public class Stats implements Actor
      */
     public void calcAvgFlightTime()
     {
-        int flightTime = (currentFlight.getActualLandTime() - currentFlight.getTakeoffTime());
-        totalFlightTimes += flightTime;
+        //int flightTime = (currentFlight.getActualLandTime() - currentFlight.getTakeoffTime());
+        //totalFlightTimes += flightTime;
         avgFlightTime =  totalFlightTimes / totalFlightsLanded;
     }
 

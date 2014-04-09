@@ -1,18 +1,30 @@
 import java.util.*;
 public class Operations
 {
+    Random rgen;
     private  ArrayList<Actor> actors;
     private  ArrayList<Gate> gates;
     private  Stats st;
+    private GUI gui;
+
+    private ArrayList<Flight> inbound;  //These are the flights that are on their way to our airport
+    private ArrayList<Flight> grounded;  //These are the flights that are landed at our airport
 
     public Operations()
     {
+        rgen = new Random();
+        int numOfPlanes = rgen.nextInt(2) + 3;
+        
         st = new Stats(this);
+        gui = new GUI(this);
         actors = new ArrayList<Actor>();
         gates = new ArrayList<Gate>();
+        inbound = new ArrayList<Flight>();
+        grounded = new ArrayList<Flight>();
         actors.add(st);
+        actors.add(gui);
         createGates(2);
-        outBoundFlights(2); 
+        inBoundFlights(numOfPlanes); 
     }
 
     public void sendStatInfo()
@@ -32,18 +44,19 @@ public class Operations
     /**
      *method to get the first open gate we can find.
      */
-   public Gate getOpenGate(){
+    public Gate getOpenGate(){
         for(Gate g: gates){
             if(g.getGateAvailability()){ return g; }
         }
         return null;
     }
 
-    private void outBoundFlights(int num){
+    private void inBoundFlights(int num){
         for(int i=0;i<num;i++){
-            makeOutBoundFlight();
+            makeInBoundFlight();
             Gate gate = getOpenGate();
         }
+        listFlights();
     }
 
     private void createGates(int num){
@@ -53,16 +66,38 @@ public class Operations
         }
     }
 
-    private void makeOutBoundFlight(){
-        Flight f = new Flight(this);
+    private void makeInBoundFlight(){
+        Flight f = new Flight(this, rgen.nextInt(1000), rgen.nextInt(15) + 1);
         actors.add(f);
         st.newFlight(f);
+        inbound.add(f);
     }
 
-       /**
-     * Will create planes going into the airport.
+    /**
+     *  This switches the flight from the arraylist of incoming flights, to the 
+     *  arraylist of grounded flights.
      */
-    private void makeInBoundFlight(){
-        
+    public void switchList(Flight f) 
+    {
+        inbound.remove(f);
+        grounded.add(f);
+    }
+
+     /**
+     *  This removes fligths from the grounded list once they takeoff
+     */
+    public void removeFlight(Flight f)
+    {
+        System.out.println("Removed:" + f.getNum());
+        actors.remove(f);
+        grounded.remove(f);
+    }
+    
+    public void listFlights(){
+        System.out.print("Flights: ");
+        for(Flight g: inbound){
+            System.out.print(g.getNum() + " ");
+        }
+        System.out.println();
     }
 }

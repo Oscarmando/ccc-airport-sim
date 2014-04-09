@@ -21,8 +21,15 @@ public class Gate
      * Mutator method to assign plane to gate.
      */
     public void setPlane(Flight flight)
-    {
+    {   
+        System.out.println("attached " + flight.getNum() );
+        gateAvailability = false;
         this.flight = flight;
+    }
+    
+    public void unsetPlane(){
+        gateAvailability = true;
+        this.flight = null;
     }
     
     /**
