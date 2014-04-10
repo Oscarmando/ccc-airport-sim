@@ -12,6 +12,7 @@ import javax.swing.text.*;
 public class GUI extends JFrame implements Actor
 {
     private int time;
+    private int dayTime;
     private JLabel timeLabel;
     private JTextArea textArea;
     private final static String newLine = "\n";
@@ -22,8 +23,8 @@ public class GUI extends JFrame implements Actor
     public GUI(Operations op)
     {
         makeFrame();
-        prepareUpdate();
-        getContentPane().repaint();
+        //prepareUpdate();
+        //getContentPane().repaint();
     }
 
     /**
@@ -54,9 +55,8 @@ public class GUI extends JFrame implements Actor
         new SmartScroller(statusPane);
         textArea.setEditable(false);
         contentPane.add(statusPane, BorderLayout.WEST);
-        
+
         //Image pane with graphics
-        
 
         //Time label
         timeLabel = new JLabel("Time: " + time);
@@ -70,7 +70,7 @@ public class GUI extends JFrame implements Actor
      * Create the main frame's menu bar.
      * @param frame   The frame that the menu bar should be added to.
      */
-    private void makeMenuBar()
+    public void makeMenuBar()
     {
         JMenuBar menubar = new JMenuBar();
         setJMenuBar(menubar);
@@ -95,16 +95,15 @@ public class GUI extends JFrame implements Actor
     /**
      * Prepare for a new round of updates (repaints) to the GUI
      */
-    private void prepareUpdate()
+    public void prepareUpdate()
     {
-        timeLabel.setText("Time: " + time);
-        textArea.append("Time: " + time + newLine);
+        timeUpdate();
     }
 
     /**
      * Reset function: Resets the timer
      */
-    private void reset()
+    public void reset()
     {
         System.out.println("Reset");
     }
@@ -112,9 +111,56 @@ public class GUI extends JFrame implements Actor
     /**
      * Quit function: quit the application.
      */
-    private void quit()
+    public void quit()
     {
         System.exit(0);
+    }
+
+    public void statusUpdate(String s)
+    {
+        textArea.append("[" + time + "]: " + s + newLine);
+    }
+
+    public void timeUpdate()
+    {
+        String newTime = convertTime(time);
+        timeLabel.setText("Time: " + newTime);
+    }
+
+    public String convertTime(int m)
+    {        
+        //Calculating days (1440 minutes in a 24 hour day)
+        int d = m / 1440;
+        //If it's been over 24 hours, reset minutes to 0
+        if(d < 1)
+            m -= (1440 * d);
+
+        //Calculating hours
+        int h = m / 60;
+        //Reseting minutes to 0 if it's been more than one hour
+        if(h > 0)
+            m -= (60 * h);
+        //Resetting hours to 0 if it's been more than 24 hours
+        if(h > 23)
+            h -= (24 * d);
+
+        //Convertnig h to a String
+        String h2;
+        //Adding a 0 in front of the hours if it's less than 10
+        if(h < 10)
+            h2 = "0" + h;
+        else
+            h2 = "" + h;
+
+        //Converting m to a String
+        String m2;
+        //Adding a 0 in front of the minutes if it's less than 10
+        if(m < 10)
+            m2 = "0" + m;
+        else
+            m2 = "" + m;
+
+        return h2 + ":" + m2;
     }
 
     /**
@@ -126,7 +172,6 @@ public class GUI extends JFrame implements Actor
 
     }
      */
-
 
     /**
      *  Found at http://tips4java.wordpress.com/2013/03/03/smart-scrolling/

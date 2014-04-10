@@ -22,7 +22,6 @@ public class Gate
      */
     public void setPlane(Flight flight)
     {   
-        System.out.println("attached " + flight.getNum() );
         gateAvailability = false;
         this.flight = flight;
     }

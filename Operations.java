@@ -67,7 +67,7 @@ public class Operations
     }
 
     private void makeInBoundFlight(){
-        Flight f = new Flight(this, rgen.nextInt(1000), rgen.nextInt(15) + 1);
+        Flight f = new Flight(this, gui, rgen.nextInt(1000), rgen.nextInt(15) + 1);
         actors.add(f);
         st.newFlight(f);
         inbound.add(f);
@@ -88,16 +88,15 @@ public class Operations
      */
     public void removeFlight(Flight f)
     {
-        System.out.println("Removed:" + f.getNum());
         actors.remove(f);
         grounded.remove(f);
     }
     
     public void listFlights(){
-        System.out.print("Flights: ");
+        String status = "Flights: ";
         for(Flight g: inbound){
-            System.out.print(g.getNum() + " ");
+            status += g.getNum() + " ";
         }
-        System.out.println();
+        gui.statusUpdate(status);
     }
 }
