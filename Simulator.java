@@ -9,7 +9,7 @@ import java.util.*;
 public class Simulator
 {
     //Speed at which each simulation tick will run in milliseconds
-    final int tickSpeed = 300;
+    final int tickSpeed = 150;
     //Limit at which the simulation resets itself
     static int tickRollover = 1440;
     //Simulation time

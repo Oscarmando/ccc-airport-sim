@@ -13,6 +13,7 @@ public class GUI extends JFrame implements Actor
 {
     private int time;
     private int dayTime;
+    private FlightController fc;
     private JLabel timeLabel;
     private JTextArea textArea;
     private final static String newLine = "\n";
@@ -20,9 +21,10 @@ public class GUI extends JFrame implements Actor
     /**
      * Creates the GUI and shows it on the screen
      */
-    public GUI(Operations op)
+    public GUI(FlightController fc)
     {
         makeFrame();
+        this.fc = fc;
         //prepareUpdate();
         //getContentPane().repaint();
     }
@@ -118,7 +120,7 @@ public class GUI extends JFrame implements Actor
 
     public void statusUpdate(String s)
     {
-        textArea.append("[" + time + "]: " + s + newLine);
+        textArea.append("[" + convertTime(time) + "] " + s + newLine);
     }
 
     public void timeUpdate()

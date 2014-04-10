@@ -3,31 +3,34 @@ import java.util.Random;
 public class Flight implements Actor
 {
     private Random random = new Random();
-    private Gate g;
+    private Gate gate;
     private Operations op;
     private GUI gui;
-
     private boolean isGrounded;
     private boolean shouldLand = false;
     private boolean shouldDepart = false;
     private boolean isPrepping = false;
     private int initTick = -1;
     private int currentTick;
-    private int departureTime;
+    private int gateTime;
     private int landTime;
     private int num;
-
-    private Gate gate;
 
     /**
      * Constructor for objects of class Flight
      */
-    public Flight(Operations op, GUI gui, int num, int landticks)
+    public Flight(Operations op, GUI gui, int num, int landticks,int gateTime,boolean isGrounded)
     {
         this.op = op;
         this.gui = gui;
         this.num = num;
         this.landTime = landticks;
+        this.isGrounded = isGrounded;
+        this.gateTime = gateTime;
+        if (isGrounded){
+            gate = op.getOpenGate();
+            gate.setPlane(this);
+        }
     }
 
     public int getNum(){
@@ -37,7 +40,7 @@ public class Flight implements Actor
     public void initVariables(){
         initTick = currentTick;
         landTime += currentTick;
-        departureTime = landTime + 30;
+        gateTime += landTime;
     }
 
     public void takeOff(){
@@ -56,7 +59,7 @@ public class Flight implements Actor
     }
 
     public void update(){
-        if(currentTick >= departureTime){
+        if(currentTick >= gateTime){
             shouldDepart = true;
         }else if(currentTick >= landTime){
             shouldLand = true;
@@ -78,7 +81,7 @@ public class Flight implements Actor
                 if(gate == null){
                     gui.statusUpdate("Flight " + num + " landing delayed: no gate.");
                     landTime += 10;
-                    departureTime = landTime + 30;
+                    gateTime = landTime + 30;
                     shouldLand = false;
                 }else{
                     land();
