@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.params=runway
+comment0.target=Runway(int)
+comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Runway\r\n
+comment1.params=
+comment1.target=boolean\ getRunAvailLand()
+comment1.text=\r\n\ Accessor\ method\ for\ runways'\ availability\ for\ a\ landing.\ \r\n
+comment2.params=
+comment2.target=boolean\ getRunAvailTakeOff()
+comment2.text=\r\n\ Accessor\ method\ for\ runways'\ availability\ for\ taking\ off.\ \r\n
+comment3.params=
+comment3.target=Flight\ getFlight()
+comment3.text=\r\n\ Gets\ flight.\r\n
+comment4.params=runwayPhaseOne
+comment4.target=void\ setRunAvailabilityLand(boolean)
+comment4.text=\r\n\ Assigns\ runway\ landing\ availability\ to\ true\ or\ false\ for\ Operations.\r\n
+comment5.params=runwayPhaseTwo
+comment5.target=void\ setRunAvailabilityAir(boolean)
+comment5.text=\r\n\ Assigns\ runway\ taking\ off\ availability\ to\ true\ or\ false\ for\ Operations.\r\n
+numComments=6
