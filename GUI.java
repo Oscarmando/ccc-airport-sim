@@ -52,7 +52,7 @@ public class GUI extends JFrame implements Actor
         contentPane.setLayout(new BorderLayout(6, 6));
 
         //Status Pane with text area
-        textArea = new JTextArea(30,25);
+        textArea = new JTextArea(35,45);
         JScrollPane statusPane = new JScrollPane(textArea);
         new SmartScroller(statusPane);
         textArea.setEditable(false);

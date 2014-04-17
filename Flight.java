@@ -4,7 +4,7 @@ public class Flight implements Actor
 {
     private Random random = new Random();
     private Gate gate;
-    private Operations op;
+    private City ct;
     private GUI gui;
     private boolean isGrounded;
     private boolean shouldLand = false;
@@ -15,20 +15,21 @@ public class Flight implements Actor
     private int gateTime;
     private int landTime;
     private int num;
+    private String city;
 
     /**
      * Constructor for objects of class Flight
      */
-    public Flight(Operations op, GUI gui, int num, int landticks,int gateTime,boolean isGrounded)
+    public Flight(City ct, GUI gui, int num, int landticks,int gateTime,boolean isGrounded)
     {
-        this.op = op;
+        this.ct = ct;
         this.gui = gui;
         this.num = num;
         this.landTime = landticks;
         this.isGrounded = isGrounded;
         this.gateTime = gateTime;
         if (isGrounded){
-            gate = op.getOpenGate();
+            gate = ct.getOpenGate();
             gate.setPlane(this);
         }
     }
@@ -46,8 +47,8 @@ public class Flight implements Actor
     public void takeOff(){
         isGrounded = false;
         gate.unsetPlane();
-        op.removeFlight(this);
-        gui.statusUpdate("Flight "+ num +" has left gate " + gate.getGateNumber() + ".");    
+        ct.removeFlight(this);
+        gui.statusUpdate("Flight "+ num +" has left gate " + gate.getGateNumber() + " for " + city + ".");    
     }
 
     public void land(){
@@ -55,13 +56,15 @@ public class Flight implements Actor
         isGrounded = true;
         isPrepping = true;
         gui.statusUpdate("Flight "+ num +" has landed at gate " + gate.getGateNumber() + ".");
-        op.switchList(this);
+        ct.switchList(this);
     }
 
     public void update(){
         if(currentTick >= gateTime){
+            city = ct.genCity();
             shouldDepart = true;
         }else if(currentTick >= landTime){
+            city = ct.genCity();            
             shouldLand = true;
         }
     }
@@ -76,10 +79,10 @@ public class Flight implements Actor
             //If the plane is in the air    
         }else{
             if(shouldLand){
-                gui.statusUpdate("Flight " + num + " reqesting gate.");
-                gate = op.getOpenGate();
+                gui.statusUpdate("Flight " + num + " from " + city + " reqesting gate.");
+                gate = ct.getOpenGate();
                 if(gate == null){
-                    gui.statusUpdate("Flight " + num + " landing delayed: no gate.");
+                    gui.statusUpdate("Flight " + num + " landing is delayed: no gate.");
                     landTime += 10;
                     gateTime = landTime + 30;
                     shouldLand = false;

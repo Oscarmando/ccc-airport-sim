@@ -9,20 +9,20 @@ import java.util.*;
 public class Simulator
 {
     //Speed at which each simulation tick will run in milliseconds
-    final int tickSpeed = 150;
+    final int tickSpeed = 500;
     //Limit at which the simulation resets itself
     static int tickRollover = 1440;
     //Simulation time
     public int time;
 
-    Operations op;
+    City ct;
 
     /**
      * Start new simulation
      */
     public Simulator(){
         time = 0;
-        op = new Operations();
+        ct = new City();
         tickLoop();
     }
 
@@ -35,8 +35,8 @@ public class Simulator
             tick();
             wait(tickSpeed);
 
-            for(int i=0; i < op.getActors().size(); i++){
-                op.getActors().get(i).act(time);
+            for(int i=0; i < ct.getActors().size(); i++){
+                ct.getActors().get(i).act(time);
             }
         }
     }

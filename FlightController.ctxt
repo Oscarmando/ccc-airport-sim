@@ -1,5 +1,5 @@
 #BlueJ class context
-comment0.params=op
-comment0.target=FlightController(Operations)
+comment0.params=ct
+comment0.target=FlightController(City)
 comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ FlightController\r\n
 numComments=1

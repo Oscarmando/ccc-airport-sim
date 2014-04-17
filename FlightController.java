@@ -7,13 +7,13 @@
  */
 public class FlightController
 {
-    private Operations op;
+    private City ct;
 
     /**
      * Constructor for objects of class FlightController
      */
-    public FlightController(Operations op)
+    public FlightController(City ct)
     {
-     this.op = op;
+     this.ct = ct;
     }
 }

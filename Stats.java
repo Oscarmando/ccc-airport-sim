@@ -9,14 +9,14 @@ public class Stats implements Actor
     private int totalFlightsLanded;
     private boolean infoRecieved;
     Flight currentFlight;
-    Operations op;
+    City ct;
 
     /**
      * Constructor for objects of class Stats
      */
-    public Stats(Operations op)
+    public Stats(City ct)
     {
-        this.op = op;
+        this.ct = ct;
         avgFlightTime = 0;
         totalFlightTimes = 0;
         totalFlightsLanded = 0;
