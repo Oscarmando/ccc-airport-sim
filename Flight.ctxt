@@ -1,6 +1,6 @@
 #BlueJ class context
-comment0.params=ct\ gui\ num\ landticks\ gateTime\ isGrounded
-comment0.target=Flight(City,\ GUI,\ int,\ int,\ int,\ boolean)
+comment0.params=operations\ ct\ gui\ num\ landticks\ gateTime\ isGrounded
+comment0.target=Flight(Operations,\ City,\ GUI,\ int,\ int,\ int,\ boolean)
 comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Flight\r\n
 comment1.params=
 comment1.target=int\ getNum()

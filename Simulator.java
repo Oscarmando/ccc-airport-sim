@@ -14,51 +14,38 @@ public class Simulator
     static int tickRollover = 1440;
     //Simulation time
     public int time;
+    //Used to pause Simultion
+    public boolean paused = false;
 
-    City ct;
+    Thread myThread = new Thread();
 
+    Operations operations;
+    Thread tickloop;
     /**
      * Start new simulation
      */
-    public Simulator(){
-        time = 0;
-        ct = new City();
-        tickLoop();
-    }
-
-    /**
-     * Run the simulation for a fixed number of ticks.
-     * Pause after each tick to give simulation real time.
-     */
-    public void tickLoop(){
-        while(true){
-            tick();
-            wait(tickSpeed);
-
-            for(int i=0; i < ct.getActors().size(); i++){
-                ct.getActors().get(i).act(time);
-            }
-        }
-    }
-
-    private void tick(){
-        time++;
-    }
-
-    /**
-     * Wait for a specified number of milliseconds before finishing.
-     * This provides an easy way to cause a small delay.
-     * @param milliseconds The number of milliseconds to wait.
-     */
-    private void wait(int milliseconds)
+    public Simulator() throws InterruptedException
     {
-        try
-        {
-            Thread.sleep(milliseconds);
-        } 
-        catch (InterruptedException e)
-        {
-            // ignore the exception
+        time = 0;
+        operations = new Operations(this);
+        tickloop = new TickLoop(operations,this);
+        tickloop.start();
+    }
+
+    public void setPaused(boolean paused)
+    {
+        this.paused = paused;
+        synchronized(tickloop) {
+            if(this.paused == false)
+                tickloop.notify();
+            else
+                this.paused = paused;
         }
+    }
+
+    public boolean paused()
+    {
+        return paused;
     }
 }
+

@@ -2,12 +2,8 @@
 comment0.params=
 comment0.target=Simulator()
 comment0.text=\r\n\ Start\ new\ simulation\r\n
-comment1.params=
-comment1.target=void\ tickLoop()
-comment1.text=\r\n\ Run\ the\ simulation\ for\ a\ fixed\ number\ of\ ticks.\r\n\ Pause\ after\ each\ tick\ to\ give\ simulation\ real\ time.\r\n
+comment1.params=paused
+comment1.target=void\ setPaused(boolean)
 comment2.params=
-comment2.target=void\ tick()
-comment3.params=milliseconds
-comment3.target=void\ wait(int)
-comment3.text=\r\n\ Wait\ for\ a\ specified\ number\ of\ milliseconds\ before\ finishing.\r\n\ This\ provides\ an\ easy\ way\ to\ cause\ a\ small\ delay.\r\n\ @param\ milliseconds\ The\ number\ of\ milliseconds\ to\ wait.\r\n
-numComments=4
+comment2.target=boolean\ paused()
+numComments=3

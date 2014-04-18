@@ -83,15 +83,27 @@ public class GUI extends JFrame implements Actor
 
         JMenuItem resetItem = new JMenuItem("Reset");
         resetItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { reset(); }
+                public void actionPerformed(ActionEvent e) { fc.reset(); }
             });
         fileMenu.add(resetItem);
 
         JMenuItem quitItem = new JMenuItem("Quit");
         quitItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { quit(); }
+                public void actionPerformed(ActionEvent e) { fc.quit(); }
             });
         fileMenu.add(quitItem);
+        
+        JMenuItem pauseItem = new JMenuItem("Pause");
+        pauseItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { fc.pause(); }
+            });
+        fileMenu.add(pauseItem);
+        
+        JMenuItem playItem = new JMenuItem("Play");
+        playItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { fc.play(); }
+            });
+        fileMenu.add(playItem);
     }
 
     /**
@@ -100,22 +112,6 @@ public class GUI extends JFrame implements Actor
     public void prepareUpdate()
     {
         timeUpdate();
-    }
-
-    /**
-     * Reset function: Resets the timer
-     */
-    public void reset()
-    {
-        System.out.println("Reset");
-    }
-
-    /**
-     * Quit function: quit the application.
-     */
-    public void quit()
-    {
-        System.exit(0);
     }
 
     public void statusUpdate(String s)

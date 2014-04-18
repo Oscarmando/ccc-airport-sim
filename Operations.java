@@ -1,24 +1,29 @@
 import java.util.*;
 public class Operations implements Actor
 {
-    Random rgen;
+    Random rgen;// = new random();
     private  ArrayList<Actor> actors;
     private  ArrayList<Gate> gates;
     private FlightController fc;
     private  Stats st;
     private GUI gui;
+    private City ct;
+    private Simulator sim;
     private ArrayList<Flight> inbound;  //These are the flights that are on their way to our airport
     private ArrayList<Flight> grounded;  //These are the flights that are landed at our airport
-    private static final double IN_BOUND_FLIGHT_PROBABILITY = 1;
-    private static final double GROUNDED_FLIGHT_PROBABILITY = .08;
+    
+    private static final double IN_BOUND_FLIGHT_PROBABILITY = .2;//.2
+    private static final double GROUNDED_FLIGHT_PROBABILITY = .6;//.6
+    private static final int AMOUNT_INITIAL_GATES = 100;
 
-    public Operations() 
+    public Operations(Simulator sim) 
     {
+        this.sim = sim;
         rgen = new Random();
-        int numOfPlanes = rgen.nextInt(2) + 3;
+        ct = new City();
         st = new Stats(this);
+        fc = new FlightController(this,sim);
         gui = new GUI(fc);
-        fc = new FlightController(this);
         actors = new ArrayList<Actor>();
         gates = new ArrayList<Gate>();
         inbound = new ArrayList<Flight>();
@@ -26,14 +31,8 @@ public class Operations implements Actor
         actors.add(st);
         actors.add(gui);
         actors.add(this);
-        createGates(100);
-        inBoundFlights(numOfPlanes); 
-        groundedFlights(numOfPlanes);
-    }
-
-    public void sendStatInfo()
-    {
-        st.recieveInfo();
+        createGates(AMOUNT_INITIAL_GATES);
+        groundedFlights();
     }
 
     private void addGate(Gate g){
@@ -58,17 +57,14 @@ public class Operations implements Actor
     private void inBoundFlights(int num){
         for(int i=0;i<num;i++){
             makeInBoundFlight();
-            Gate gate = getOpenGate();
         }
-        listFlights(true);
     }
 
-    private void groundedFlights(int num){
-        for(int i=0;i<num;i++){
-            makeGroundedFlight();
-            Gate gate = getOpenGate();
+    private void groundedFlights(){
+        for(int i=0; i < gates.size(); i++){
+            if(rgen.nextDouble() <= (GROUNDED_FLIGHT_PROBABILITY))
+                makeGroundedFlight();
         }
-        listFlights(false);
     }
 
     private void createGates(int num){
@@ -79,16 +75,14 @@ public class Operations implements Actor
     }
 
     private void makeInBoundFlight(){
-        Flight f = new Flight(this, gui, rgen.nextInt(9999), rgen.nextInt(15) + 1, rgen.nextInt(40) +20, false);
+        Flight f = new Flight(this,ct, gui, rgen.nextInt(9999), rgen.nextInt(15) + 1, rgen.nextInt(350) + 11, false);
         actors.add(f);
-        st.newFlight(f);
         inbound.add(f);
     }
 
     private void makeGroundedFlight(){
-        Flight f = new Flight(this, gui, rgen.nextInt(9999), rgen.nextInt(15) + 1, rgen.nextInt(40) +20, true);
+        Flight f = new Flight(this,ct, gui, rgen.nextInt(9999), rgen.nextInt(15) + 1, rgen.nextInt(360) + 1, true);
         actors.add(f);
-        st.newFlight(f);
         grounded.add(f);
     }
 
@@ -111,26 +105,11 @@ public class Operations implements Actor
         grounded.remove(f);
     }
 
-    public void listFlights(boolean f){
-        String status = "Flights: ";
-        if(f){
-            for(Flight g: inbound){
-                status += g.getNum() + " ";
-            }
-            gui.statusUpdate(status);
-        }
-        else {
-            for(Flight g: grounded){
-                status += g.getNum() + " ";
-            }
-            gui.statusUpdate(status);
-        }
-    }
 
     public void act(int tick)
     {
         if (rgen.nextDouble() <= IN_BOUND_FLIGHT_PROBABILITY){
-            inBoundFlights(rgen.nextInt(5));
+            inBoundFlights(rgen.nextInt(2) + 1);
         }
     }
 }

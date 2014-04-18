@@ -4,6 +4,7 @@ public class Flight implements Actor
 {
     private Random random = new Random();
     private Gate gate;
+    private Operations operations;
     private City ct;
     private GUI gui;
     private boolean isGrounded;
@@ -20,16 +21,17 @@ public class Flight implements Actor
     /**
      * Constructor for objects of class Flight
      */
-    public Flight(City ct, GUI gui, int num, int landticks,int gateTime,boolean isGrounded)
+    public Flight(Operations operations,City ct, GUI gui, int num, int landticks,int gateTime,boolean isGrounded)
     {
+        this.operations = operations;
         this.ct = ct;
         this.gui = gui;
         this.num = num;
         this.landTime = landticks;
         this.isGrounded = isGrounded;
-        this.gateTime = gateTime;
+        this.gateTime = 1;
         if (isGrounded){
-            gate = ct.getOpenGate();
+            gate = operations.getOpenGate();
             gate.setPlane(this);
         }
     }
@@ -47,7 +49,7 @@ public class Flight implements Actor
     public void takeOff(){
         isGrounded = false;
         gate.unsetPlane();
-        ct.removeFlight(this);
+        operations.removeFlight(this);
         gui.statusUpdate("Flight "+ num +" has left gate " + gate.getGateNumber() + " for " + city + ".");    
     }
 
@@ -56,7 +58,7 @@ public class Flight implements Actor
         isGrounded = true;
         isPrepping = true;
         gui.statusUpdate("Flight "+ num +" has landed at gate " + gate.getGateNumber() + ".");
-        ct.switchList(this);
+        operations.switchList(this);
     }
 
     public void update(){
@@ -80,11 +82,11 @@ public class Flight implements Actor
         }else{
             if(shouldLand){
                 gui.statusUpdate("Flight " + num + " from " + city + " reqesting gate.");
-                gate = ct.getOpenGate();
+                gate = operations.getOpenGate();
                 if(gate == null){
                     gui.statusUpdate("Flight " + num + " landing is delayed: no gate.");
                     landTime += 10;
-                    gateTime = landTime + 30;
+                    gateTime = landTime + 10;
                     shouldLand = false;
                 }else{
                     land();
