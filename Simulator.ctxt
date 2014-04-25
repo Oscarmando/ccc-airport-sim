@@ -2,8 +2,4 @@
 comment0.params=
 comment0.target=Simulator()
 comment0.text=\r\n\ Start\ new\ simulation\r\n
-comment1.params=paused
-comment1.target=void\ setPaused(boolean)
-comment2.params=
-comment2.target=boolean\ paused()
-numComments=3
+numComments=1

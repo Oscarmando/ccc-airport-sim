@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.params=tickLoop
+comment0.target=SettingPan(TickLoop)
+comment1.params=e
+comment1.target=void\ stateChanged(javax.swing.event.ChangeEvent)
+comment2.params=
+comment2.target=void\ makePanel()
+comment3.params=e
+comment3.target=void\ stateChanged(javax.swing.event.ChangeEvent)
+numComments=4

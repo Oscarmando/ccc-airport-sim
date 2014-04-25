@@ -1,4 +1,4 @@
-
+import java.util.*;
 /**
  * Shuttles an arriving flight to a gate, and from a gate to takeoff.
  * Might replace some methods from gate class.
@@ -9,17 +9,59 @@ public class Runway
 {
     private boolean runwayPhaseOne;//runway availability for taxiing to gate
     private boolean runwayPhaseTwo;//runway avaiability for taxiing to "sky"
-    private int rNumb;//number of runways
+    private boolean runwayAvailability;//If runway is open or not.
+    private int runwayNumber;//number of runways
     private Flight flight;//importing flights
     private Gate gate;//importing gates
+    private ArrayList<Flight> flights;//For all possible flights.
+    private int MAX_CAPACITY = 1;//Max number of Flights to a runway.
 
     /**
      * Constructor for objects of class Runway
      */
-    public Runway(int runway)
+    public Runway(int runwayNumber)
     {
-        this.rNumb = runway;
+        this.runwayNumber = runwayNumber;
         runwayPhaseOne = true;
+        runwayAvailability = true;
+        flights = new ArrayList<Flight>();
+    }
+    
+    public void setPlane(Flight flight)
+    {
+        runwayAvailability = false;
+        this.flight = flight;
+        //flights.add(flight);
+    }
+    
+    public void unsetPlane()
+    {
+        runwayAvailability = true;
+        this.flight = null;
+        //flights.remove(flight);
+    }
+    
+    public void remove(Flight flight)
+    {
+        flights.remove(flight);
+    }
+    
+    public boolean isClear()
+    {
+        return (flights.size() < MAX_CAPACITY);
+    }
+    
+    public int getRunwayNumber()
+    {
+        return runwayNumber;
+    }
+    
+    /**
+     * Accessor method to return gate availability.
+     */
+    public boolean getRunwayAvailability()
+    {
+        return runwayAvailability;
     }
 
     /**

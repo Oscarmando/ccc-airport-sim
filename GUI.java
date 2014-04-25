@@ -12,21 +12,27 @@ import javax.swing.text.*;
 public class GUI extends JFrame implements Actor
 {
     private int time;
-    private int dayTime;
+    private int day;
     private FlightController fc;
-    private JLabel timeLabel;
     private JTextArea textArea;
+    private JPanel north;
+    private JPanel west;
+    private JLabel timeLabel;
+    private JLabel statAvgGateTimeLabel;
     private final static String newLine = "\n";
+    /** Tick Speed Changer */
+    private SettingPan span;
+    private TickLoop tickLoop;
 
     /**
      * Creates the GUI and shows it on the screen
      */
-    public GUI(FlightController fc)
+    public GUI(FlightController fc, TickLoop tickLoop)
     {
-        makeFrame();
         this.fc = fc;
-        //prepareUpdate();
-        //getContentPane().repaint();
+        this.tickLoop = tickLoop;
+        this.span = new SettingPan(tickLoop);
+        makeFrame();
     }
 
     /**
@@ -47,22 +53,42 @@ public class GUI extends JFrame implements Actor
         setTitle("CCC Airport Simulator");
         makeMenuBar();
 
-        //Frame container and layout
+        /**Frame container and layout*/
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout(6, 6));
 
+        /**North panel*/
+        north = new JPanel();
+        north.setLayout(new GridLayout(0,1));
+        
+        //Time label
+        timeLabel = new JLabel("  Time: " + time + "  Day: " + day);
+        north.add(timeLabel);
+        
+        //Tick Speed Pan
+        north.add(span);
+        
+        contentPane.add(north, BorderLayout.NORTH);
+
+        /**West panel*/
+        west = new JPanel();
+        //BoxLayout grid = new BoxLayout(west, BoxLayout.Y_AXIS);
+        west.setLayout(new BoxLayout(west, BoxLayout.Y_AXIS));
+
         //Status Pane with text area
-        textArea = new JTextArea(35,45);
+        textArea = new JTextArea(15,30);
         JScrollPane statusPane = new JScrollPane(textArea);
         new SmartScroller(statusPane);
         textArea.setEditable(false);
-        contentPane.add(statusPane, BorderLayout.WEST);
+        west.add(statusPane);
+
+        //Average Gate Time Label
+        statAvgGateTimeLabel = new JLabel("Average Gate Time: ");
+        west.add(statAvgGateTimeLabel);
+
+        contentPane.add(west, BorderLayout.WEST);
 
         //Image pane with graphics
-
-        //Time label
-        timeLabel = new JLabel("Time: " + time);
-        contentPane.add(timeLabel, BorderLayout.SOUTH);
 
         pack();
         setVisible(true);
@@ -81,29 +107,23 @@ public class GUI extends JFrame implements Actor
         JMenu fileMenu = new JMenu("File");
         menubar.add(fileMenu);
 
-        JMenuItem resetItem = new JMenuItem("Reset");
-        resetItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { fc.reset(); }
+        JMenuItem playItem = new JMenuItem("Play");
+        playItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { fc.play(); }
             });
-        fileMenu.add(resetItem);
+        fileMenu.add(playItem);
+
+        JMenuItem pauseItem = new JMenuItem("Pause");
+        pauseItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { tickLoop.pause(); }
+            });
+        fileMenu.add(pauseItem);
 
         JMenuItem quitItem = new JMenuItem("Quit");
         quitItem.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) { fc.quit(); }
             });
         fileMenu.add(quitItem);
-        
-        JMenuItem pauseItem = new JMenuItem("Pause");
-        pauseItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { fc.pause(); }
-            });
-        fileMenu.add(pauseItem);
-        
-        JMenuItem playItem = new JMenuItem("Play");
-        playItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { fc.play(); }
-            });
-        fileMenu.add(playItem);
     }
 
     /**
@@ -111,7 +131,15 @@ public class GUI extends JFrame implements Actor
      */
     public void prepareUpdate()
     {
-        timeUpdate();
+        timeUpdate();     
+    }
+
+    /**
+     * Quit function: quit the application.
+     */
+    public void quit()
+    {
+        System.exit(0);
     }
 
     public void statusUpdate(String s)
@@ -122,16 +150,21 @@ public class GUI extends JFrame implements Actor
     public void timeUpdate()
     {
         String newTime = convertTime(time);
-        timeLabel.setText("Time: " + newTime);
+        timeLabel.setText("  Time: " + newTime + "    Day: " + day);
+    }
+
+    public void statsUpdate(int avgGateTime)
+    {
+        statAvgGateTimeLabel.setText("Average Gate Time: " + avgGateTime);
     }
 
     public String convertTime(int m)
     {        
         //Calculating days (1440 minutes in a 24 hour day)
-        int d = m / 1440;
+        day = m / 1440;
         //If it's been over 24 hours, reset minutes to 0
-        if(d < 1)
-            m -= (1440 * d);
+        if(day < 1)
+            m -= (1440 * day);
 
         //Calculating hours
         int h = m / 60;
@@ -140,7 +173,7 @@ public class GUI extends JFrame implements Actor
             m -= (60 * h);
         //Resetting hours to 0 if it's been more than 24 hours
         if(h > 23)
-            h -= (24 * d);
+            h -= (24 * day);
 
         //Convertnig h to a String
         String h2;
@@ -160,16 +193,6 @@ public class GUI extends JFrame implements Actor
 
         return h2 + ":" + m2;
     }
-
-    /**
-     * StatusPanel is a Swing component that displays the status updates
-     * of the incoming and outgoing flights.
-     *
-    public class ImagePanel extends JComponent
-    {
-
-    }
-     */
 
     /**
      *  Found at http://tips4java.wordpress.com/2013/03/03/smart-scrolling/

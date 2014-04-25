@@ -8,31 +8,24 @@ import java.util.*;
  */
 public class Simulator
 {
-    //Speed at which each simulation tick will run in milliseconds
-    final int tickSpeed = 500;
-    //Limit at which the simulation resets itself
-    static int tickRollover = 1440;
-    //Simulation time
-    public int time;
     //Used to pause Simultion
     public boolean paused = false;
 
     Thread myThread = new Thread();
 
-    Operations operations;
+    //Operations operations;
     Thread tickloop;
     /**
      * Start new simulation
      */
     public Simulator() throws InterruptedException
     {
-        time = 0;
-        operations = new Operations(this);
-        tickloop = new TickLoop(operations,this);
+        //operations = new Operations(this, tickloop);
+        tickloop = new TickLoop(this);
         tickloop.start();
     }
 
-    public void setPaused(boolean paused)
+    /*public void setPaused(boolean paused)
     {
         this.paused = paused;
         synchronized(tickloop) {
@@ -46,6 +39,6 @@ public class Simulator
     public boolean paused()
     {
         return paused;
-    }
+    }*/
 }
 

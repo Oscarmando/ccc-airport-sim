@@ -1,6 +1,6 @@
 #BlueJ class context
-comment0.params=operations\ sim
-comment0.target=TickLoop(Operations,\ Simulator)
+comment0.params=sim
+comment0.target=TickLoop(Simulator)
 comment1.params=
 comment1.target=void\ run()
 comment2.params=
@@ -8,4 +8,14 @@ comment2.target=void\ tick()
 comment3.params=milliseconds
 comment3.target=void\ hold(int)
 comment3.text=\r\n\ Wait\ for\ a\ specified\ number\ of\ milliseconds\ before\ finishing.\r\n\ This\ provides\ an\ easy\ way\ to\ cause\ a\ small\ delay.\r\n\ @param\ milliseconds\ The\ number\ of\ milliseconds\ to\ wait.\r\n
-numComments=4
+comment4.params=
+comment4.target=void\ play()
+comment5.params=
+comment5.target=void\ pause()
+comment6.params=
+comment6.target=boolean\ paused()
+comment7.params=sp
+comment7.target=void\ setSpeed(int)
+comment8.params=
+comment8.target=int\ getSpeed()
+numComments=9

@@ -1,6 +1,6 @@
 #BlueJ class context
-comment0.params=operations\ sim
-comment0.target=FlightController(Operations,\ Simulator)
+comment0.params=operations\ tickLoop
+comment0.target=FlightController(Operations,\ TickLoop)
 comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ FlightController\r\n
 comment1.params=
 comment1.target=void\ reset()

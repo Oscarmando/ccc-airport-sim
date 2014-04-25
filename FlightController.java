@@ -8,15 +8,15 @@
 public class FlightController
 {
     private Operations operations;
-    private Simulator sim;
+    private TickLoop tickLoop;
 
     /**
      * Constructor for objects of class FlightController
      */
-    public FlightController(Operations operations, Simulator sim)
+    public FlightController(Operations operations, TickLoop tickLoop)
     {
      this.operations = operations;
-     this.sim = sim;
+     this.tickLoop = tickLoop;
     }
     
       /**
@@ -39,11 +39,11 @@ public class FlightController
     
     public void pause()
     {
-        sim.setPaused(true);
+        tickLoop.pause();
     }
     
     public void play()
     {
-        sim.setPaused(false);
+        tickLoop.play();
     }
 }
