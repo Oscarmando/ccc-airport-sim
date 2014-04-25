@@ -4,9 +4,9 @@ import javax.swing.*;
 import java.awt.Component;
 import javax.swing.text.*;
 /**
- * Write a description of class GUI here.
+ * Displays the Simulation in a nice form.
  * 
- * @author (Asa Swan) 
+ * @author CS216 Class 
  * @version (4/8/2014)
  */
 public class GUI extends JFrame implements Actor

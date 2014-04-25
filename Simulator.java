@@ -1,6 +1,6 @@
 import java.util.*;
 /**
- * Run the simulation by iterating time after a certain wait interval.
+ * Creates the Thread "Tickloop".
  * Calls operations to collect actors to act.
  * 
  * @author CS216 Class
@@ -8,12 +8,9 @@ import java.util.*;
  */
 public class Simulator
 {
-    //Used to pause Simultion
+    //Used to pause Simultion.
     public boolean paused = false;
-
-    Thread myThread = new Thread();
-
-    //Operations operations;
+    //Thread that runs allowing pausing and playing.
     Thread tickloop;
     /**
      * Start new simulation
@@ -25,20 +22,5 @@ public class Simulator
         tickloop.start();
     }
 
-    /*public void setPaused(boolean paused)
-    {
-        this.paused = paused;
-        synchronized(tickloop) {
-            if(this.paused == false)
-                tickloop.notify();
-            else
-                this.paused = paused;
-        }
-    }
-
-    public boolean paused()
-    {
-        return paused;
-    }*/
 }
 

@@ -1,23 +1,31 @@
 import java.util.*;
+/**
+ * Main creation class. Creates almost all needed objects.
+ * CS216 Class
+ */
 public class Operations implements Actor
 {
     Random rgen;// = new random();
-    private  ArrayList<Actor> actors;
-    private  ArrayList<Gate> gates;
-    private ArrayList<Runway> runways;
-    private FlightController fc;
-    private  Stats st;
-    private GUI gui;
-    private City ct;
-    private TickLoop tickLoop;
+    private  ArrayList<Actor> actors;//A list of Actors.
+    private  ArrayList<Gate> gates;//A list of Gates.
+    private ArrayList<Runway> runways;//A List of Runways.
+    private FlightController fc;//Instance of FlightController.
+    private  Stats st;//Instance of Stats.
+    private GUI gui;//Instance of GUI.
+    private City ct;//Instance of City.
+    private TickLoop tickLoop;//Instance of TickLoop.
     private ArrayList<Flight> inbound;  //These are the flights that are on their way to our airport
     private ArrayList<Flight> grounded;  //These are the flights that are landed at our airport
 
-    private static final double IN_BOUND_FLIGHT_PROBABILITY = .2;//.2
-    private static final double GROUNDED_FLIGHT_PROBABILITY = .6;//.6
-    private static final int AMOUNT_INITIAL_GATES = 100;
-    private static final int AMOUNT_INITAL_RUNWAYS = 10;
-
+    private static final double IN_BOUND_FLIGHT_PROBABILITY = .2;//(Default.2) Probability of making in bound Flights.
+    private static final double GROUNDED_FLIGHT_PROBABILITY = .6;//(Default.6) Probability of making grounded Flights for beginning of Simulation.
+    private static final int AMOUNT_INITIAL_GATES = 100;//Number of Gates.
+    private static final int AMOUNT_INITAL_RUNWAYS = 10;//Number of Runways.
+    
+    /**
+     * Constructor for Operations intializes almost all objects, List,
+     * and intial conditions for Simulation.
+     */
     public Operations(TickLoop tickLoop) 
     {
         this.tickLoop = tickLoop;
@@ -38,10 +46,16 @@ public class Operations implements Actor
         groundedFlights();
     }
 
+    /**
+     * Adds Gate to ArrayList gates.
+     */
     private void addGate(Gate g){
         gates.add(g);
     }
 
+    /**
+     * Returns ArrayList actors.
+     */
     public ArrayList<Actor> getActors()
     {
         return actors;
@@ -57,6 +71,9 @@ public class Operations implements Actor
         return null;
     }
 
+    /**
+     * Method to find the first open Runway.
+     */
     public Runway getOpenRunway()
     {
         for(Runway r: runways)
@@ -66,12 +83,19 @@ public class Operations implements Actor
         return null;
     }
 
+    /**
+     * Creates a specific number of Gates based on "num".
+     */
     private void inBoundFlights(int num){
         for(int i=0;i<num;i++){
             makeInBoundFlight();
         }
     }
 
+    /**
+     * Creates a specific number of Flights already at Gates based on a
+     * conditional statement.
+     */
     private void groundedFlights(){
         for(int i=0; i < gates.size()/2; i++){
             if(rgen.nextDouble() <= (GROUNDED_FLIGHT_PROBABILITY))
@@ -79,6 +103,9 @@ public class Operations implements Actor
         }
     }
 
+    /**
+     * Creates a specific number of Gates based on "num".
+     */
     private void createGates(int num){
         for(int i=1;i<=num;i++){
             Gate g = new Gate(i);
@@ -86,6 +113,9 @@ public class Operations implements Actor
         }
     }
 
+    /**
+     * Creates a specific number of Runways based on "num".
+     */
     private void createRunways(int num)
     {
         for(int i=1; i<num;i++) {
@@ -94,12 +124,19 @@ public class Operations implements Actor
         }
     }
 
+    /**
+     * Creates a Flight that is already "in the air" and adds it to actors
+     * ArrayList and inbound ArrayList.
+     */
     private void makeInBoundFlight(){
         Flight f = new Flight(this,ct, gui, st, rgen.nextInt(9999), rgen.nextInt(15) + 1, rgen.nextInt(350) + 11, rgen.nextInt(5) + 2, false);
         actors.add(f);
         inbound.add(f);
     }
-
+    /**
+     * Creates a Flight that is already "on the ground" and add it to actors
+     * ArrayList and grounded ArrayList.
+     */
     private void makeGroundedFlight(){
         Flight f = new Flight(this,ct, gui, st, rgen.nextInt(9999), rgen.nextInt(15) + 1, rgen.nextInt(360) + 1,rgen.nextInt(5) + 2, true);
         actors.add(f);
@@ -125,6 +162,9 @@ public class Operations implements Actor
         grounded.remove(f);
     }
 
+    /**
+     * Allows a random number of incoming Flights to be created every tick.
+     */
     public void act(int tick)
     {
         if (rgen.nextDouble() <= IN_BOUND_FLIGHT_PROBABILITY){

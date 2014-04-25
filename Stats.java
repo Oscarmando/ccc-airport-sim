@@ -3,6 +3,7 @@ import java.util.ArrayList;
 /**
  * Tracks information regarding all flights, gates, and airports in general.
  * Calculates various statistical data and reports to GUI.
+ * CS216 Class
  */
 public class Stats
 {

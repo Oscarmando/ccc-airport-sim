@@ -1,14 +1,14 @@
 /**
  * Actor Interface
  * 
- * Ilya Nechay 
+ * CS216 Class 
  * Version 1 
  * 02/20/2014
  */
 
 /**
-This is the Actor Interface.
-*/
+ * Actor interface.
+ */
 public interface Actor
 {
     void act (int tick);

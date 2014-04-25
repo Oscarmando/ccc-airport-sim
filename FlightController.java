@@ -1,8 +1,9 @@
 
 /**
- * Write a description of class FlightController here.
+ * Allows us to interact with GUI and change status of Simulation while
+ * running.
  * 
- * @author (your name) 
+ * @author CS216 Class 
  * @version (a version number or a date)
  */
 public class FlightController
@@ -37,11 +38,17 @@ public class FlightController
         System.exit(0);
     }
     
+    /**
+     * Calls the method to pause Simulation.
+     */
     public void pause()
     {
         tickLoop.pause();
     }
     
+    /**
+     * Calls the method to resume the Simulation.
+     */
     public void play()
     {
         tickLoop.play();

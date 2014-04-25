@@ -2,13 +2,11 @@ import java.util.*;
 /**
  * Shuttles an arriving flight to a gate, and from a gate to takeoff.
  * Might replace some methods from gate class.
- * @author (Jeremiah) 
+ * @author CS216 Class 
  * @version (.2)
  */
 public class Runway
 {
-    private boolean runwayPhaseOne;//runway availability for taxiing to gate
-    private boolean runwayPhaseTwo;//runway avaiability for taxiing to "sky"
     private boolean runwayAvailability;//If runway is open or not.
     private int runwayNumber;//number of runways
     private Flight flight;//importing flights
@@ -22,35 +20,47 @@ public class Runway
     public Runway(int runwayNumber)
     {
         this.runwayNumber = runwayNumber;
-        runwayPhaseOne = true;
         runwayAvailability = true;
         flights = new ArrayList<Flight>();
     }
     
-    public void setPlane(Flight flight)
+    /**
+     * Sets a flight to the runway and makes runway unavailable.
+     */
+    public void setFlight(Flight flight)
     {
         runwayAvailability = false;
         this.flight = flight;
-        //flights.add(flight);
     }
     
-    public void unsetPlane()
+    /**
+     * Removes flight from runway and makes runway available.
+     */
+    public void unsetFlight()
     {
         runwayAvailability = true;
         this.flight = null;
-        //flights.remove(flight);
     }
     
+    /**
+     * Removes flight from ArrayList flights. May not be used recheck.
+     */
     public void remove(Flight flight)
     {
         flights.remove(flight);
     }
     
+    /**
+     * States if runways is available for flights using MAX_CAPACITY.
+     */
     public boolean isClear()
     {
         return (flights.size() < MAX_CAPACITY);
     }
     
+    /**
+     * Returns the Runway number.
+     */
     public int getRunwayNumber()
     {
         return runwayNumber;
@@ -63,24 +73,6 @@ public class Runway
     {
         return runwayAvailability;
     }
-
-    /**
-     * Accessor method for runways' availability for a landing. 
-     */
-    public boolean getRunAvailLand()
-    {
-        return runwayPhaseOne;
-        
-    }
-    
-     /**
-     * Accessor method for runways' availability for taking off. 
-     */
-    public boolean getRunAvailTakeOff()
-    {
-        return runwayPhaseTwo;
-        
-    }
     
     /**
      * Gets flight.
@@ -88,21 +80,5 @@ public class Runway
     public Flight getFlight()
     {
         return flight;
-    }
-
-    /**
-     * Assigns runway landing availability to true or false for Operations.
-     */
-    public void setRunAvailabilityLand(boolean runwayPhaseOne)
-    {
-        this.runwayPhaseOne = runwayPhaseOne;
-    }
-
-    /**
-     * Assigns runway taking off availability to true or false for Operations.
-     */
-    public void setRunAvailabilityAir(boolean runwayPhaseTwo)
-    {
-        this.runwayPhaseTwo = runwayPhaseTwo;
     }
 }

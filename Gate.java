@@ -1,12 +1,12 @@
 /**
- * CCC-airport gate class.
- * 
+ * Gate class that allows Flights to be at a gate.
+ * CS216 Class
  */
 public class Gate 
 {
-    private boolean gateAvailability; // if gate is available or not
-    private int gateNumber;
-    private Flight flight;
+    private boolean gateAvailability; // if gate is available or not.
+    private int gateNumber;//Number Assigned to Gate.
+    private Flight flight;//Instance of Flight.
 
     /**
      * Constructor for objects of class Gate.
@@ -18,21 +18,24 @@ public class Gate
     }
     
     /**
-     * Mutator method to assign plane to gate.
+     * Assigns a Flight to a gate and makes gate unavailable.
      */
-    public void setPlane(Flight flight)
+    public void setFlight(Flight flight)
     {   
         gateAvailability = false;
         this.flight = flight;
     }
     
-    public void unsetPlane(){
+    /**
+     * Removes a Flight from the gate and makes gate available.
+     */
+    public void unsetFlight(){
         gateAvailability = true;
         this.flight = null;
     }
     
     /**
-     * Accessor method to get plane from gate.
+     * Accessor method to get Flight from gate.
      */
     public Flight getFlight()
     {
@@ -56,7 +59,7 @@ public class Gate
     }
     
     /**
-     * Mutator method to assign gate availabiliy to true or false.
+     * Mutator method to assign gateAvailabiliy to true or false.
      */
     public void setGateAvailability(boolean gateAvailability)
     {
