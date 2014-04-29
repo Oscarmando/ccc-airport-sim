@@ -13,15 +13,16 @@ public class Operations implements Actor
     private  Stats st;//Instance of Stats.
     private GUI gui;//Instance of GUI.
     private City ct;//Instance of City.
+    private Flight flight;//Instance of Flight.
     private TickLoop tickLoop;//Instance of TickLoop.
     private ArrayList<Flight> inbound;  //These are the flights that are on their way to our airport
     private ArrayList<Flight> grounded;  //These are the flights that are landed at our airport
 
-    private static final double IN_BOUND_FLIGHT_PROBABILITY = .2;//(Default.2) Probability of making in bound Flights.
+    private static double IN_BOUND_FLIGHT_PROBABILITY = .2;//(Default.2) Probability of making in bound Flights.
     private static final double GROUNDED_FLIGHT_PROBABILITY = .6;//(Default.6) Probability of making grounded Flights for beginning of Simulation.
     private static final int AMOUNT_INITIAL_GATES = 100;//Number of Gates.
-    private static final int AMOUNT_INITAL_RUNWAYS = 10;//Number of Runways.
-    
+    private static int AMOUNT_INITAL_RUNWAYS = 2;//Number of Runways.
+
     /**
      * Constructor for Operations intializes almost all objects, List,
      * and intial conditions for Simulation.
@@ -72,6 +73,22 @@ public class Operations implements Actor
     }
 
     /**
+     * Set's Inbound Flight probability
+     */
+    public void inBoundProbability(double inbound)
+    {
+        IN_BOUND_FLIGHT_PROBABILITY = inbound;
+    }
+
+    /**
+     * Returns total number of gates
+     */
+    public int getTotalGates()
+    {
+        return gates.size();
+    }
+
+    /**
      * Method to find the first open Runway.
      */
     public Runway getOpenRunway()
@@ -86,7 +103,7 @@ public class Operations implements Actor
     /**
      * Creates a specific number of Gates based on "num".
      */
-    private void inBoundFlights(int num){
+    public void inBoundFlights(int num){
         for(int i=0;i<num;i++){
             makeInBoundFlight();
         }
@@ -98,15 +115,17 @@ public class Operations implements Actor
      */
     private void groundedFlights(){
         for(int i=0; i < gates.size()/2; i++){
-            if(rgen.nextDouble() <= (GROUNDED_FLIGHT_PROBABILITY))
+            if(rgen.nextDouble() <= (GROUNDED_FLIGHT_PROBABILITY)){
                 makeGroundedFlight();
+                st.calcPercGateUsed(getTotalGates(), true);
+            }
         }
     }
 
     /**
      * Creates a specific number of Gates based on "num".
      */
-    private void createGates(int num){
+    public void createGates(int num){
         for(int i=1;i<=num;i++){
             Gate g = new Gate(i);
             gates.add(g);
@@ -116,9 +135,9 @@ public class Operations implements Actor
     /**
      * Creates a specific number of Runways based on "num".
      */
-    private void createRunways(int num)
+    public void createRunways(int num)
     {
-        for(int i=1; i<num;i++) {
+        for(int i=1; i<=num;i++) {
             Runway r = new Runway(i);
             runways.add(r);
         }
@@ -129,18 +148,55 @@ public class Operations implements Actor
      * ArrayList and inbound ArrayList.
      */
     private void makeInBoundFlight(){
-        Flight f = new Flight(this,ct, gui, st, rgen.nextInt(9999), rgen.nextInt(15) + 1, rgen.nextInt(350) + 11, rgen.nextInt(5) + 2, false);
+        Flight f = new Flight(this,ct, gui, st, genFlightNum(), rgen.nextInt(15) + 1, rgen.nextInt(2) + 2, rgen.nextInt(350) + 11, rgen.nextInt(6) + 2, false);
         actors.add(f);
         inbound.add(f);
+        st.calcTotalInc();
     }
+
     /**
      * Creates a Flight that is already "on the ground" and add it to actors
      * ArrayList and grounded ArrayList.
      */
     private void makeGroundedFlight(){
-        Flight f = new Flight(this,ct, gui, st, rgen.nextInt(9999), rgen.nextInt(15) + 1, rgen.nextInt(360) + 1,rgen.nextInt(5) + 2, true);
+        Flight f = new Flight(this,ct, gui, st, genFlightNum(), rgen.nextInt(15) + 1, rgen.nextInt(2) + 2, rgen.nextInt(360) + 1, rgen.nextInt(6) + 2, true);
         actors.add(f);
         grounded.add(f);
+    }
+
+    /**
+     * Generates flight number and makes sure no flights have the same.
+     */
+    public int genFlightNum()
+    {
+        boolean approved = false;
+        int num = 0;
+        while(!approved)
+        {
+            num = rgen.nextInt(9999) + 1; //Randomly generate a number between 1-9999
+            boolean isDouble = false; //If number is doubled
+            for(Flight f : inbound)
+            {
+                if(f.getNum() == num)
+                {
+                    isDouble = true; //Number is doubled
+                    break;
+                }
+            }
+            for(Flight f : grounded)
+            {
+                if(f.getNum() == num)
+                {
+                    isDouble = true; //Number is doubled
+                    break;
+                }
+            }
+            if(!isDouble)
+            {
+                approved = true;
+            }    
+        }
+        return num;
     }
 
     /**
@@ -160,6 +216,75 @@ public class Operations implements Actor
     {
         actors.remove(f);
         grounded.remove(f);
+        st.calcTotalOut();
+    }
+
+    /**
+     * Creates a specific number of Gates based on "num".
+     * Consider modifiyng original creator to reduce duplication!!!
+     */
+    public void addGates(int num)
+    {
+        for(int i=1; i<=num;i++) {
+            Gate r = new Gate(gates.size()+1);
+            gates.add(r);
+            System.out.println("Gate " + r.getGateNumber() + " has been created");
+        }
+    }
+
+    /**
+     * Removes Gates from simulation
+     */
+    public void removeGates(int num)
+    {
+        for(int i=0;num > i;i++) {
+            Gate r = gates.get(gates.size()-1);
+            gates.remove(r);
+            System.out.println("Gate " + r.getGateNumber() + " has been removed");
+        }
+    }
+
+    /**
+     * Removes an inbound Flight from simulation
+     */
+    public void removeFlights(int num)
+    {
+        for (int i=0; num > i;i++) {
+            if(inbound.size() != 0) {
+                flight = inbound.get(inbound.size()-1);
+                inbound.remove(flight);
+                actors.remove(flight);
+                st.removeFlightInc();
+                System.out.println("Flight" + flight.getNum() +" has been deleted");
+            }
+            else 
+                System.out.println("No inbound flights to be cancelled");
+        }
+    }
+
+    /**
+     * Creates a specific number of Runways based on "num".
+     * Consider modifiyng original creator to reduce duplication!!!
+     */
+    public void addRunways(int num)
+    {
+        for(int i=1; i<=num;i++) {
+            Runway r = new Runway(runways.size()+1);
+            runways.add(r);
+            System.out.println("Runway " + r.getRunwayNumber() + " has been created");
+        }
+    }
+
+    /**
+     * Removes Runways from simulation
+     */
+    public void removeRunways(int num)
+    {
+        for(int i=0;num > i;i++) {
+            Runway r = runways.get(runways.size()-1);
+            runways.remove(r);
+            System.out.println("Runway " + r.getRunwayNumber() + " has been removed");
+        }
     }
 
     /**
@@ -168,7 +293,7 @@ public class Operations implements Actor
     public void act(int tick)
     {
         if (rgen.nextDouble() <= IN_BOUND_FLIGHT_PROBABILITY){
-            inBoundFlights(rgen.nextInt(2) + 1);
+            inBoundFlights(1);
         }
     }
 }

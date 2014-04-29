@@ -53,4 +53,62 @@ public class FlightController
     {
         tickLoop.play();
     }
+    
+    /**
+     * Calls the FlightProbability mutator from Operations for GUI
+     */
+    public void changeFlightProbability(double inbound)
+    {
+        operations.inBoundProbability(inbound);
+    }
+    
+    /**
+     * Creates Gates via operations.
+     */
+    public void addGate(int num)
+    {
+        operations.addGates(num);
+    }
+    
+    /**
+     * Creates Flights via operations.
+     */
+    public void addFlight(int num)
+    {
+        operations.inBoundFlights(num);
+    }
+    
+    /**
+     * Creates Runways via operations.
+     */
+    public void addRunway(int num)
+    {
+        operations.addRunways(num);
+    }
+    
+    /**
+     * Removes Gates via operations.
+     */
+    public void removeGate(int num)
+    {
+        operations.removeGates(num);
+    }
+    
+    /**
+     * Removes Flights via operations.
+     */
+    public void removeFlight(int num)
+    {
+        operations.removeFlights(num);
+    }
+    
+    /**
+     * Removes Runways via operations.
+     */
+    public void removeRunway(int num)
+    {
+        operations.removeRunways(num);
+    }
+    
+    
 }

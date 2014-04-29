@@ -23,35 +23,46 @@ public class Flight implements Actor
     private int gateTime;//Used to tell Flight how long to wait at gate.
     private int landTime;//Used to tell Flight how long until land attempt.
     private int runwayTime;//Used to tell Flight how long to stay on Runway.
-    private int num;//Actual Flight numbers
+    private int takeOffTime;//Used to tell Flight how long to leave
+    private int flightNum;//Flight number
     private String city;//Used to hold a city name.
 
     /**
      * Constructor for objects of class Flight, Also checks at beginning of simulation
      * if it is an already grounded flight to assign it a Gate.
      */
-    public Flight(Operations operations,City ct, GUI gui, Stats st, int num, int landticks,int gateTime,int runwayTime,boolean isGrounded)
+    public Flight(Operations operations,City ct,GUI gui,Stats st,int flightNum,int landTime,int runwayTime,int gateTime,int takeOffTime, boolean isGrounded)
     {
         this.operations = operations;
         this.ct = ct;
         this.gui = gui;
-        this.num = num;
-        this.landTime = landticks;
-        this.isGrounded = isGrounded;
-        this.gateTime = gateTime;
-        this.runwayTime = runwayTime;
         this.st = st;
+        this.flightNum = flightNum;
+        this.isGrounded = isGrounded;
+        this.landTime = landTime;
+        this.runwayTime = runwayTime;
+        this.gateTime = gateTime;
+        this.takeOffTime = takeOffTime;
+        city = ct.genCity();
         if (isGrounded){
             gate = operations.getOpenGate();
             gate.setFlight(this);
         }
+        else{
+            gui.statusUpdate("Flight " + flightNum + " from " + city + " reqesting Runway for landing in " + landTime + " minutes.");
+        }
+    }
+
+    public boolean isGrounded()
+    {
+        return isGrounded;
     }
 
     /**
      * Returns the Flight number.
      */
     public int getNum(){
-        return num;
+        return flightNum;
     }
 
     /**
@@ -62,6 +73,37 @@ public class Flight implements Actor
         landTime += currentTick;
         runwayTime += landTime;
         gateTime += runwayTime;
+        takeOffTime += gateTime;
+    }
+
+    /**
+     * Method is used to update all ticktimes for each flight phase based
+     * on the delays the flight receives
+     * 
+     * Phase 1: Flight is delayed trying to land on runway
+     * Phase 2: Flight is delayed trying to station at gate
+     * Phase 3: Flight is delayed trying to takeoff on runway
+     */
+    public void updateDelayedFlightVariables(int flightPhase){
+        switch(flightPhase) {
+            case 1:
+            landTime += 10;
+            runwayTime += 10;
+            gateTime += 10;
+            takeOffTime += 10;
+            break;
+
+            case 2: 
+            runwayTime += 10;
+            gateTime += 10;
+            takeOffTime += 10;
+            break;
+
+            case 3: 
+            gateTime += 10;
+            takeOffTime += 10;
+            break;
+        }
     }
 
     /**
@@ -75,7 +117,8 @@ public class Flight implements Actor
         isGrounded = false;
         runway.unsetFlight();
         operations.removeFlight(this);
-        gui.statusUpdate("Flight "+ num +" has left runway " + runway.getRunwayNumber() + " for " + city + ".");    
+        city = ct.genCity();
+        gui.statusUpdate("Flight "+ flightNum +" has left runway " + runway.getRunwayNumber() + " for " + city + ".");    
     }
 
     /**
@@ -86,7 +129,7 @@ public class Flight implements Actor
         runway.setFlight(this);
         isGrounded = true;
         isAtRunway = true;
-        gui.statusUpdate("Flight "+ num +" has landed on runway " + runway.getRunwayNumber() + ".");
+        gui.statusUpdate("Flight "+ flightNum +" has landed on runway " + runway.getRunwayNumber() + ".");
         operations.switchList(this);
     }
 
@@ -100,7 +143,8 @@ public class Flight implements Actor
         isAtRunway = false;
         runway.unsetFlight();
         gate.setFlight(this);
-        gui.statusUpdate("Flight "+ num +" has moved to Gate " + gate.getGateNumber() + " from runway " + runway.getRunwayNumber() + ".");
+        gui.statusUpdate("Flight "+ flightNum +" has moved to Gate " + gate.getGateNumber() + " from runway " + runway.getRunwayNumber() + ".");
+        st.calcPercGateUsed(operations.getTotalGates(), true);
     }
 
     /**
@@ -112,7 +156,8 @@ public class Flight implements Actor
         isReady = true;
         gate.unsetFlight();
         runway.setFlight(this);
-        gui.statusUpdate("Flight "+ num +" has moved to Runway " + runway.getRunwayNumber() + " from Gate " +gate.getGateNumber() +" to take off.");
+        gui.statusUpdate("Flight "+ flightNum +" has moved to Runway " + runway.getRunwayNumber() + " from Gate " +gate.getGateNumber() +" to take off.");
+        st.calcPercGateUsed(operations.getTotalGates(), false);
     }
 
     /**
@@ -123,12 +168,10 @@ public class Flight implements Actor
     public void update(){
         if(currentTick >= runwayTime && isAtRunway ){//&& runway != null){
             isTaxing = true;
-        } else if(currentTick >= gateTime && isTaxing == false && gate != null){
-            city = ct.genCity();
+        } else if(currentTick >= takeOffTime && isTaxing == false && gate != null){
             shouldDepart = true;
             takeOff = true;
-        }else if(currentTick >= landTime){
-            city = ct.genCity();            
+        }else if(currentTick >= landTime){          
             shouldLand = true;
         }
     }
@@ -146,12 +189,11 @@ public class Flight implements Actor
             takeOff();
         }
         else if(isTaxing && isAtRunway){
-            gui.statusUpdate("Flight " + num + " from " + city + " reqesting Gate.");
+            gui.statusUpdate("Flight " + flightNum + " from " + city + " reqesting Gate.");
             gate = operations.getOpenGate();
             if(gate == null){
-                gui.statusUpdate("Flight " + num + " Taxing is delayed: no open Gates.");
-                landTime += 10;
-                gateTime = landTime + 10;
+                gui.statusUpdate("Flight " + flightNum + " Taxing is delayed: no open Gates.");
+                updateDelayedFlightVariables(2);
             }
             else{
                 taxiToGate();
@@ -159,13 +201,12 @@ public class Flight implements Actor
         }
         else if(isGrounded){
             if(shouldDepart){
-                gui.statusUpdate("Flight " +num+ " from " +city+ " requesting Runway for takeoff.");
+                gui.statusUpdate("Flight " + flightNum + " from " +city+ " requesting Runway for takeoff.");
                 runway = operations.getOpenRunway();
                 if(runway == null)
                 {
-                    gui.statusUpdate("Flight " + num + " Takeoff is delayed: no open Runways.");
-                    landTime += 10;
-                    runwayTime = landTime + 10;
+                    gui.statusUpdate("Flight " + flightNum + " Takeoff is delayed: no open Runways.");
+                    updateDelayedFlightVariables(3);
                 }
 
                 else if(takeOff){
@@ -175,12 +216,10 @@ public class Flight implements Actor
         }
         else{
             if(shouldLand){
-                gui.statusUpdate("Flight " + num + " from " + city + " reqesting Runway for landing.");
                 runway = operations.getOpenRunway();
                 if(runway == null){
-                    gui.statusUpdate("Flight " + num + " landing is delayed: no open Runway.");
-                    landTime += 10;
-                    runwayTime = landTime + 10;
+                    gui.statusUpdate("Flight " + flightNum + " landing is delayed: no open Runway.");
+                    updateDelayedFlightVariables(1);
                     shouldLand = false;
                 }else{
                     land();

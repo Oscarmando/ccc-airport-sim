@@ -9,10 +9,13 @@ public class Stats
 {
     private GUI gui;
     /**Fields for calculating Average Gate Time*/
-    private int totalGateTimes;
-    private int totalGatePlanes;
+    private int totalGateTimes = 0;
+    private int totalGatePlanes = 0;
     private boolean gateTimesChanged;
     /**Fields for calculating... */
+    private double planesAtGates = 0;
+    private int incPlanes = 0;
+    private int outPlanes = 0;
 
     /**
      * Constructor for objects of class Stats
@@ -20,8 +23,6 @@ public class Stats
     public Stats(GUI gui)
     {
         this.gui = gui;
-        totalGateTimes = 0;
-        totalGatePlanes = 0;
     }
 
     /**
@@ -36,6 +37,49 @@ public class Stats
     {
         totalGateTimes += flightGateTime;
         totalGatePlanes++;
-        gui.statsUpdate(totalGateTimes / totalGatePlanes);
+        gui.avgGateTimeUpdate(totalGateTimes / totalGatePlanes);
+    }
+
+    /**
+     * @param total gates in airport, whether adding or subtracting plane
+     * Method keeps adding if planes occupy a gate. If not, it 
+     * subtracts it from the total.
+     * The information is then passed to the GUI.
+     */
+    public void calcPercGateUsed(int totalGates, boolean adding)
+    {  
+        double totalGatesDouble=(double) totalGates;
+        if(adding)
+            planesAtGates++;
+        else
+            planesAtGates--;
+        gui.gatePercUsed(planesAtGates / totalGates *100);
+    }
+    
+    /**
+     * Total number of incoming Flights airport has seen over during of simulation.
+     */
+    public void calcTotalInc()
+    {
+        incPlanes++;
+        System.out.println("Inc total " + incPlanes);
+    }
+    
+    /**
+     * Adjust the total number of inc flights if removed.
+     */
+    public void removeFlightInc()
+    {
+        incPlanes--;
+        System.out.println("Inc total " + incPlanes);
+    }
+    
+    /**
+     * Total number of outgoing Flights airport has seen oer during of simulation.
+     */
+    public void calcTotalOut()
+    {
+        outPlanes++;
+        System.out.println("Out total " + outPlanes);
     }
 }

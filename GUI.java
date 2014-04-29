@@ -14,10 +14,16 @@ public class GUI extends JFrame implements Actor
     private int time;
     private int day;
     private FlightController fc;
-    private JTextArea textArea;
+    private ButtonGroup group;
     private JPanel north;
     private JPanel west;
+    private JPanel south;
+    private JTextArea textArea;
+    private Images images;
+    private JPanel center;
     private JLabel timeLabel;
+    private JRadioButton radioButton;
+    private JLabel statGatePercUsedLabel;
     private JLabel statAvgGateTimeLabel;
     private final static String newLine = "\n";
     /** Tick Speed Changer */
@@ -60,14 +66,14 @@ public class GUI extends JFrame implements Actor
         /**North panel*/
         north = new JPanel();
         north.setLayout(new GridLayout(0,1));
-        
+
         //Time label
         timeLabel = new JLabel("  Time: " + time + "  Day: " + day);
         north.add(timeLabel);
-        
+
         //Tick Speed Pan
         north.add(span);
-        
+
         contentPane.add(north, BorderLayout.NORTH);
 
         /**West panel*/
@@ -76,11 +82,15 @@ public class GUI extends JFrame implements Actor
         west.setLayout(new BoxLayout(west, BoxLayout.Y_AXIS));
 
         //Status Pane with text area
-        textArea = new JTextArea(15,30);
+        textArea = new JTextArea(15,42);
         JScrollPane statusPane = new JScrollPane(textArea);
         new SmartScroller(statusPane);
         textArea.setEditable(false);
         west.add(statusPane);
+
+        //Percentage of Gates Used
+        statGatePercUsedLabel = new JLabel("Percentage of Gates Used: ");
+        west.add(statGatePercUsedLabel);
 
         //Average Gate Time Label
         statAvgGateTimeLabel = new JLabel("Average Gate Time: ");
@@ -88,10 +98,53 @@ public class GUI extends JFrame implements Actor
 
         contentPane.add(west, BorderLayout.WEST);
 
+        /** Center Panel */
         //Image pane with graphics
+        center = new JPanel();
+
+        images = new Images();
+        center.add(images);
+
+        contentPane.add(images);
+        
+        /** South Panel*/
+        south = new JPanel();
+        south.setLayout(new GridLayout(1,0));
+        
+        group = new ButtonGroup();
+        
+        radioButton = new JRadioButton("Normal",true);
+        radioButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { fc.changeFlightProbability(.2); }
+            });
+            
+        group.add(radioButton);
+        south.add(radioButton);
+      
+        radioButton = new JRadioButton("Increase Flights");
+        radioButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) { fc.changeFlightProbability(.4); }
+        });
+       
+        
+        group.add(radioButton);
+        south.add(radioButton);
+        
+        contentPane.add(south, BorderLayout.SOUTH);
+        
+        
 
         pack();
         setVisible(true);
+        fullscreen();
+    }
+
+    public void fullscreen()
+    {
+        GraphicsDevice gd;
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        gd = ge.getDefaultScreenDevice();
+        gd.setFullScreenWindow(this);
     }
 
     /**
@@ -124,6 +177,46 @@ public class GUI extends JFrame implements Actor
                 public void actionPerformed(ActionEvent e) { fc.quit(); }
             });
         fileMenu.add(quitItem);
+        
+        //Creates the menu for FlightController to act upon
+        JMenu settingMenu = new JMenu("Settings");
+        menubar.add(settingMenu);
+
+        JMenuItem addGateItem = new JMenuItem("Add Gate(s)");
+        addGateItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { fc.addGate(1); }
+            });
+        settingMenu.add(addGateItem);
+
+        JMenuItem removeGateItem = new JMenuItem("Remove Gate(s)");
+        removeGateItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { fc.removeGate(1); }
+            });
+        settingMenu.add(removeGateItem);
+
+        JMenuItem addFlightItem = new JMenuItem("Add Flight(s)");
+        addFlightItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { fc.addFlight(1); }
+            });
+        settingMenu.add(addFlightItem);
+        
+        JMenuItem removeFlightItem = new JMenuItem("Remove Flight(s)");
+        removeFlightItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { fc.removeFlight(1); }
+            });
+        settingMenu.add(removeFlightItem);
+        
+        JMenuItem addRunwayItem = new JMenuItem("Add Runway(s)");
+        addRunwayItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { fc.addRunway(1); }
+            });
+        settingMenu.add(addRunwayItem);
+        
+        JMenuItem removeRunwayItem = new JMenuItem("Remove Runway(s)");
+        removeRunwayItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { fc.removeRunway(1); }
+            });
+        settingMenu.add(removeRunwayItem);
     }
 
     /**
@@ -153,7 +246,12 @@ public class GUI extends JFrame implements Actor
         timeLabel.setText("  Time: " + newTime + "    Day: " + day);
     }
 
-    public void statsUpdate(int avgGateTime)
+    public void gatePercUsed(double percent)
+    {
+        statGatePercUsedLabel.setText("Gate Utilization: " + (int) percent + "%");
+    }
+
+    public void avgGateTimeUpdate(int avgGateTime)
     {
         statAvgGateTimeLabel.setText("Average Gate Time: " + avgGateTime);
     }
