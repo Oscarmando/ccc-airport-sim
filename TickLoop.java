@@ -9,7 +9,7 @@
 public class TickLoop extends Thread
 {
     //Speed at which each simulation tick will run in milliseconds.
-    private int tickSpeed = 300;
+    private int tickSpeed = 1000;
     //Simulation time.
     public int time;
     //Used to pause Simulation.

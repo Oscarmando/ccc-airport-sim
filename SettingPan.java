@@ -26,7 +26,7 @@ public class SettingPan extends JPanel
      */
     private void makePanel(){
         layout = new FlowLayout(FlowLayout.LEFT);
-        slider = new JSlider(-500, -1, ((tickLoop.getSpeed())*-1));
+        slider = new JSlider(-2000, -5, ((tickLoop.getSpeed())*-1));
         slider.setSize(50, 20);
         setLayout(layout);
         add(new JLabel("Clock Speed:"));

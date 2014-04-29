@@ -16,11 +16,11 @@ public class FlightController
      */
     public FlightController(Operations operations, TickLoop tickLoop)
     {
-     this.operations = operations;
-     this.tickLoop = tickLoop;
+        this.operations = operations;
+        this.tickLoop = tickLoop;
     }
-    
-      /**
+
+    /**
      * Reset function: Resets the timer
      */
     public void reset()
@@ -37,7 +37,7 @@ public class FlightController
     {
         System.exit(0);
     }
-    
+
     /**
      * Calls the method to pause Simulation.
      */
@@ -45,7 +45,7 @@ public class FlightController
     {
         tickLoop.pause();
     }
-    
+
     /**
      * Calls the method to resume the Simulation.
      */
@@ -53,7 +53,7 @@ public class FlightController
     {
         tickLoop.play();
     }
-    
+
     /**
      * Calls the FlightProbability mutator from Operations for GUI
      */
@@ -61,7 +61,7 @@ public class FlightController
     {
         operations.inBoundProbability(inbound);
     }
-    
+
     /**
      * Creates Gates via operations.
      */
@@ -69,7 +69,7 @@ public class FlightController
     {
         operations.addGates(num);
     }
-    
+
     /**
      * Creates Flights via operations.
      */
@@ -77,7 +77,7 @@ public class FlightController
     {
         operations.inBoundFlights(num);
     }
-    
+
     /**
      * Creates Runways via operations.
      */
@@ -85,7 +85,7 @@ public class FlightController
     {
         operations.addRunways(num);
     }
-    
+
     /**
      * Removes Gates via operations.
      */
@@ -93,7 +93,7 @@ public class FlightController
     {
         operations.removeGates(num);
     }
-    
+
     /**
      * Removes Flights via operations.
      */
@@ -101,7 +101,7 @@ public class FlightController
     {
         operations.removeFlights(num);
     }
-    
+
     /**
      * Removes Runways via operations.
      */
@@ -109,6 +109,12 @@ public class FlightController
     {
         operations.removeRunways(num);
     }
-    
-    
+
+    /**
+     * Modifies delay through Flight.
+     */
+    public void setDelay(int delay)
+    {
+        operations.setDelay(delay);
+    }
 }

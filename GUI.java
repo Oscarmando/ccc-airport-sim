@@ -25,6 +25,13 @@ public class GUI extends JFrame implements Actor
     private JRadioButton radioButton;
     private JLabel statGatePercUsedLabel;
     private JLabel statAvgGateTimeLabel;
+    private JLabel statAvgDelayLabel;
+    private JLabel numIncFlightsLabel;
+    private JLabel numOutFlightsLabel;
+    private JLabel avgDailyOpLabel;
+    private JLabel projAnnualOpLabel;
+    private JLabel crashedLabel;
+    private JLabel planesMissingLabel;
     private final static String newLine = "\n";
     /** Tick Speed Changer */
     private SettingPan span;
@@ -93,8 +100,36 @@ public class GUI extends JFrame implements Actor
         west.add(statGatePercUsedLabel);
 
         //Average Gate Time Label
-        statAvgGateTimeLabel = new JLabel("Average Gate Time: ");
+        statAvgGateTimeLabel = new JLabel("Average Gate Time: ?");
         west.add(statAvgGateTimeLabel);
+
+        //Average Delay Label
+        statAvgDelayLabel = new JLabel("Average Delay Time: 0");
+        west.add(statAvgDelayLabel);
+
+        //Num of Incoming Flights
+        numIncFlightsLabel = new JLabel("Total Incoming Flights: 0");
+        west.add(numIncFlightsLabel);
+
+        //Num of Outbound Flights
+        numOutFlightsLabel = new JLabel("Total Outbound Flights: 0");
+        west.add(numOutFlightsLabel);
+
+        //Daily Operations
+        avgDailyOpLabel = new JLabel("Average Daily Operations: 0");
+        west.add(avgDailyOpLabel);
+
+        //Projected Yearly Operations
+        projAnnualOpLabel = new JLabel("Projected Annual Operations: 0");
+        west.add(projAnnualOpLabel);
+        
+        //Projected Yearly Operations
+        crashedLabel = new JLabel("Planes Crashed and Burned: 0");
+        west.add(crashedLabel);
+        
+        //Projected Yearly Operations
+        planesMissingLabel = new JLabel();
+        west.add(planesMissingLabel);
 
         contentPane.add(west, BorderLayout.WEST);
 
@@ -106,33 +141,36 @@ public class GUI extends JFrame implements Actor
         center.add(images);
 
         contentPane.add(images);
-        
+
         /** South Panel*/
         south = new JPanel();
         south.setLayout(new GridLayout(1,0));
-        
+
         group = new ButtonGroup();
-        
+        //Normat setting
         radioButton = new JRadioButton("Normal",true);
+        radioButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) { fc.changeFlightProbability(.1); fc.setDelay(10);}
+            });
+
+        group.add(radioButton);
+        south.add(radioButton);
+        //Increased Flights
+        radioButton = new JRadioButton("Increase Flights");
         radioButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) { fc.changeFlightProbability(.2); }
             });
-            
         group.add(radioButton);
         south.add(radioButton);
-      
-        radioButton = new JRadioButton("Increase Flights");
+        //Stormy Weather
+        radioButton = new JRadioButton("Stormy Weather");
         radioButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) { fc.changeFlightProbability(.4); }
-        });
-       
-        
+                public void actionPerformed(ActionEvent e) { fc.setDelay(20); fc.changeFlightProbability(.05); }
+            });
         group.add(radioButton);
         south.add(radioButton);
-        
+
         contentPane.add(south, BorderLayout.SOUTH);
-        
-        
 
         pack();
         setVisible(true);
@@ -177,42 +215,42 @@ public class GUI extends JFrame implements Actor
                 public void actionPerformed(ActionEvent e) { fc.quit(); }
             });
         fileMenu.add(quitItem);
-        
+
         //Creates the menu for FlightController to act upon
         JMenu settingMenu = new JMenu("Settings");
         menubar.add(settingMenu);
 
-        JMenuItem addGateItem = new JMenuItem("Add Gate(s)");
+        JMenuItem addGateItem = new JMenuItem("Add Gate");
         addGateItem.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) { fc.addGate(1); }
             });
         settingMenu.add(addGateItem);
 
-        JMenuItem removeGateItem = new JMenuItem("Remove Gate(s)");
+        JMenuItem removeGateItem = new JMenuItem("Remove Gate");
         removeGateItem.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) { fc.removeGate(1); }
             });
         settingMenu.add(removeGateItem);
 
-        JMenuItem addFlightItem = new JMenuItem("Add Flight(s)");
+        JMenuItem addFlightItem = new JMenuItem("Add Flight");
         addFlightItem.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) { fc.addFlight(1); }
             });
         settingMenu.add(addFlightItem);
-        
-        JMenuItem removeFlightItem = new JMenuItem("Remove Flight(s)");
+
+        JMenuItem removeFlightItem = new JMenuItem("Remove Flight");
         removeFlightItem.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) { fc.removeFlight(1); }
             });
         settingMenu.add(removeFlightItem);
-        
-        JMenuItem addRunwayItem = new JMenuItem("Add Runway(s)");
+
+        JMenuItem addRunwayItem = new JMenuItem("Add Runway");
         addRunwayItem.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) { fc.addRunway(1); }
             });
         settingMenu.add(addRunwayItem);
-        
-        JMenuItem removeRunwayItem = new JMenuItem("Remove Runway(s)");
+
+        JMenuItem removeRunwayItem = new JMenuItem("Remove Runway");
         removeRunwayItem.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) { fc.removeRunway(1); }
             });
@@ -256,6 +294,54 @@ public class GUI extends JFrame implements Actor
         statAvgGateTimeLabel.setText("Average Gate Time: " + avgGateTime);
     }
 
+    public void avgDelayUpdate(double avgDelay)
+    {
+        statAvgDelayLabel.setText("Average Delay Time: " + Math.round(avgDelay));
+    }
+
+    public void avgDailyOpUpdate(int totalOperations)
+    {
+        if(day > 0){
+            avgDailyOpLabel.setText("Average Daily Operations: " + (totalOperations / (day)));
+            projAnnualOpUpdate(totalOperations / day);
+        }
+    }
+
+    public void projAnnualOpUpdate(int projYearly)
+    {
+        projAnnualOpLabel.setText("Projected Yearly Operations: " + (projYearly * 365));
+    }
+
+    public void incFlights(int incFlights)
+    {
+        numIncFlightsLabel.setText("Total Flights In: " + incFlights);
+    }
+
+    public void outFlights(int outFlights)
+    {
+        numOutFlightsLabel.setText("Total Flights Out: " + outFlights);
+    }
+    
+    public void crashedUpdate(int crashed)
+    {
+        crashedLabel.setText("Planes Crashed and Burned: " + crashed);
+    }
+    
+    public void planeMissing()
+    {
+        planesMissingLabel.setText("Flight 370 missing");
+    }
+
+    public void addFlight(Flight f)
+    {
+        images.addFlight(f);
+    }
+
+    public void removeFlight(Flight f)
+    {
+        images.removeFlight(f);
+    }
+
     public String convertTime(int m)
     {        
         //Calculating days (1440 minutes in a 24 hour day)
@@ -291,175 +377,4 @@ public class GUI extends JFrame implements Actor
 
         return h2 + ":" + m2;
     }
-
-    /**
-     *  Found at http://tips4java.wordpress.com/2013/03/03/smart-scrolling/
-     *  
-     *  The SmartScroller will attempt to keep the viewport positioned based on
-     *  the users interaction with the scrollbar. The normal behaviour is to keep
-     *  the viewport positioned to see new data as it is dynamically added.
-     *
-     *  Assuming vertical scrolling and data is added to the bottom:
-     *
-     *  - when the viewport is at the bottom and new data is added,
-     *    then automatically scroll the viewport to the bottom
-     *  - when the viewport is not at the bottom and new data is added,
-     *    then do nothing with the viewport
-     *
-     *  Assuming vertical scrolling and data is added to the top:
-     *
-     *  - when the viewport is at the top and new data is added,
-     *    then do nothing with the viewport
-     *  - when the viewport is not at the top and new data is added, then adjust
-     *    the viewport to the relative position it was at before the data was added
-     *
-     *  Similiar logic would apply for horizontal scrolling.
-     */
-    public class SmartScroller implements AdjustmentListener
-    {
-        public final static int HORIZONTAL = 0;
-        public final static int VERTICAL = 1;
-
-        public final static int START = 0;
-        public final static int END = 1;
-
-        private int viewportPosition;
-
-        private JScrollBar scrollBar;
-        private boolean adjustScrollBar = true;
-
-        private int previousValue = -1;
-        private int previousMaximum = -1;
-
-        /**
-         *  Convenience constructor.
-         *  Scroll direction is VERTICAL and viewport position is at the END.
-         *
-         *  @param scrollPane the scroll pane to monitor
-         */
-        public SmartScroller(JScrollPane scrollPane)
-        {
-            this(scrollPane, VERTICAL, END);
-        }
-
-        /**
-         *  Convenience constructor.
-         *  Scroll direction is VERTICAL.
-         *
-         *  @param scrollPane the scroll pane to monitor
-         *  @param viewportPosition valid values are START and END
-         */
-        public SmartScroller(JScrollPane scrollPane, int viewportPosition)
-        {
-            this(scrollPane, VERTICAL, viewportPosition);
-        }
-
-        /**
-         *  Specify how the SmartScroller will function.
-         *
-         *  @param scrollPane the scroll pane to monitor
-         *  @param scrollDirection indicates which JScrollBar to monitor.
-         *                         Valid values are HORIZONTAL and VERTICAL.
-         *  @param viewportPosition indicates where the viewport will normally be
-         *                          positioned as data is added.
-         *                          Valid values are START and END
-         */
-        public SmartScroller(JScrollPane scrollPane, int scrollDirection, int viewportPosition)
-        {
-            if (scrollDirection != HORIZONTAL
-            &&  scrollDirection != VERTICAL)
-                throw new IllegalArgumentException("invalid scroll direction specified");
-
-            if (viewportPosition != START
-            &&  viewportPosition != END)
-                throw new IllegalArgumentException("invalid viewport position specified");
-
-            this.viewportPosition = viewportPosition;
-
-            if (scrollDirection == HORIZONTAL)
-                scrollBar = scrollPane.getHorizontalScrollBar();
-            else
-                scrollBar = scrollPane.getVerticalScrollBar();
-
-            scrollBar.addAdjustmentListener( this );
-
-            //  Turn off automatic scrolling for text components
-
-            Component view = scrollPane.getViewport().getView();
-
-            if (view instanceof JTextComponent)
-            {
-                JTextComponent textComponent = (JTextComponent)view;
-                DefaultCaret caret = (DefaultCaret)textComponent.getCaret();
-                caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
-            }
-        }
-
-        @Override
-        public void adjustmentValueChanged(final AdjustmentEvent e)
-        {
-            SwingUtilities.invokeLater(new Runnable()
-                {
-                    public void run()
-                    {
-                        checkScrollBar(e);
-                    }
-                });
-        }
-
-        /*
-         *  Analyze every adjustment event to determine when the viewport
-         *  needs to be repositioned.
-         */
-        private void checkScrollBar(AdjustmentEvent e)
-        {
-            //  The scroll bar listModel contains information needed to determine
-            //  whether the viewport should be repositioned or not.
-
-            JScrollBar scrollBar = (JScrollBar)e.getSource();
-            BoundedRangeModel listModel = scrollBar.getModel();
-            int value = listModel.getValue();
-            int extent = listModel.getExtent();
-            int maximum = listModel.getMaximum();
-
-            boolean valueChanged = previousValue != value;
-            boolean maximumChanged = previousMaximum != maximum;
-
-            //  Check if the user has manually repositioned the scrollbar
-
-            if (valueChanged && !maximumChanged)
-            {
-                if (viewportPosition == START)
-                    adjustScrollBar = value != 0;
-                else
-                    adjustScrollBar = value + extent >= maximum;
-            }
-
-            //  Reset the "value" so we can reposition the viewport and
-            //  distinguish between a user scroll and a program scroll.
-            //  (ie. valueChanged will be false on a program scroll)
-
-            if (adjustScrollBar && viewportPosition == END)
-            {
-                //  Scroll the viewport to the end.
-                scrollBar.removeAdjustmentListener( this );
-                value = maximum - extent;
-                scrollBar.setValue( value );
-                scrollBar.addAdjustmentListener( this );
-            }
-
-            if (adjustScrollBar && viewportPosition == START)
-            {
-                //  Keep the viewport at the same relative viewportPosition
-                scrollBar.removeAdjustmentListener( this );
-                value = value + maximum - previousMaximum;
-                scrollBar.setValue( value );
-                scrollBar.addAdjustmentListener( this );
-            }
-
-            previousValue = value;
-            previousMaximum = maximum;
-        }
-    }
-
 }

@@ -18,10 +18,11 @@ public class Operations implements Actor
     private ArrayList<Flight> inbound;  //These are the flights that are on their way to our airport
     private ArrayList<Flight> grounded;  //These are the flights that are landed at our airport
 
-    private static double IN_BOUND_FLIGHT_PROBABILITY = .2;//(Default.2) Probability of making in bound Flights.
+    private static double IN_BOUND_FLIGHT_PROBABILITY = .1;//(Default.2) Probability of making in bound Flights.
     private static final double GROUNDED_FLIGHT_PROBABILITY = .6;//(Default.6) Probability of making grounded Flights for beginning of Simulation.
     private static final int AMOUNT_INITIAL_GATES = 100;//Number of Gates.
     private static int AMOUNT_INITAL_RUNWAYS = 2;//Number of Runways.
+    private int delay = 10; //For Delay Times
 
     /**
      * Constructor for Operations intializes almost all objects, List,
@@ -148,7 +149,7 @@ public class Operations implements Actor
      * ArrayList and inbound ArrayList.
      */
     private void makeInBoundFlight(){
-        Flight f = new Flight(this,ct, gui, st, genFlightNum(), rgen.nextInt(15) + 1, rgen.nextInt(2) + 2, rgen.nextInt(350) + 11, rgen.nextInt(6) + 2, false);
+        Flight f = new Flight(this,ct, gui, st, genFlightNum(), rgen.nextInt(15) + 1, 5, rgen.nextInt(550) + 11, 5, delay, false);
         actors.add(f);
         inbound.add(f);
         st.calcTotalInc();
@@ -159,7 +160,7 @@ public class Operations implements Actor
      * ArrayList and grounded ArrayList.
      */
     private void makeGroundedFlight(){
-        Flight f = new Flight(this,ct, gui, st, genFlightNum(), rgen.nextInt(15) + 1, rgen.nextInt(2) + 2, rgen.nextInt(360) + 1, rgen.nextInt(6) + 2, true);
+        Flight f = new Flight(this,ct, gui, st, genFlightNum(), rgen.nextInt(15) + 1, 5, rgen.nextInt(560) + 1, 5, delay, true);
         actors.add(f);
         grounded.add(f);
     }
@@ -228,7 +229,7 @@ public class Operations implements Actor
         for(int i=1; i<=num;i++) {
             Gate r = new Gate(gates.size()+1);
             gates.add(r);
-            System.out.println("Gate " + r.getGateNumber() + " has been created");
+            gui.statusUpdate("Gate " + r.getGateNumber() + " has been created");
         }
     }
 
@@ -240,7 +241,7 @@ public class Operations implements Actor
         for(int i=0;num > i;i++) {
             Gate r = gates.get(gates.size()-1);
             gates.remove(r);
-            System.out.println("Gate " + r.getGateNumber() + " has been removed");
+            gui.statusUpdate("Gate " + r.getGateNumber() + " has been removed");
         }
     }
 
@@ -255,10 +256,10 @@ public class Operations implements Actor
                 inbound.remove(flight);
                 actors.remove(flight);
                 st.removeFlightInc();
-                System.out.println("Flight" + flight.getNum() +" has been deleted");
+                gui.statusUpdate("Flight " + flight.getNum() +" has been deleted");
             }
             else 
-                System.out.println("No inbound flights to be cancelled");
+                gui.statusUpdate("No inbound flights to be cancelled");
         }
     }
 
@@ -271,7 +272,7 @@ public class Operations implements Actor
         for(int i=1; i<=num;i++) {
             Runway r = new Runway(runways.size()+1);
             runways.add(r);
-            System.out.println("Runway " + r.getRunwayNumber() + " has been created");
+            gui.statusUpdate("Runway " + r.getRunwayNumber() + " has been created");
         }
     }
 
@@ -283,8 +284,20 @@ public class Operations implements Actor
         for(int i=0;num > i;i++) {
             Runway r = runways.get(runways.size()-1);
             runways.remove(r);
-            System.out.println("Runway " + r.getRunwayNumber() + " has been removed");
+            gui.statusUpdate("Runway " + r.getRunwayNumber() + " has been removed");
         }
+    }
+
+    /**
+     * Modifies int Delay.
+     */
+    public void setDelay(int delay)
+    {
+        this.delay = delay;
+        for(Flight f: grounded)
+            f.setDelay(delay);
+        for(Flight f: inbound)
+            f.setDelay(delay);
     }
 
     /**
